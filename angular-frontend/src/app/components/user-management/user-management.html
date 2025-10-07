@@ -1,26 +1,118 @@
+<!-- Gestión Completa de Usuarios CRUD -->
 <div class="usuarios-container">
+  
+  <!-- Header con botón para crear nuevo usuario -->
   <div class="usuarios-header">
-    <h2>Lista de Usuarios</h2>
-    <p>Usuarios registrados en el sistema</p>
+    <h2>📋 Gestión de Usuarios</h2>
+    <p>Administra los usuarios del sistema</p>
+    <button class="btn-nuevo" (click)="nuevoUsuario()">➕ Nuevo Usuario</button>
   </div>
 
-  <div *ngIf="loading" class="loading">
-    <p>Cargando usuarios...</p>
+  <!-- Mensajes de éxito y error -->
+  <div *ngIf="mensajeExito" class="mensaje-exito">
+    ✅ {{ mensajeExito }}
+    <button (click)="limpiarMensajes()" class="btn-cerrar">×</button>
   </div>
 
+  <div *ngIf="mensajeError" class="mensaje-error">
+    ❌ {{ mensajeError }}
+    <button (click)="limpiarMensajes()" class="btn-cerrar">×</button>
+  </div>
+
+  <!-- Formulario para crear/editar usuario -->
+  <div *ngIf="mostrarFormulario" class="formulario-usuario">
+    <h3>{{ modoEdicion ? '✏️ Editar Usuario' : '➕ Crear Nuevo Usuario' }}</h3>
+    
+    <form (ngSubmit)="guardarUsuario()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="username">Usuario:</label>
+          <input type="text" id="username" name="username" 
+                 [(ngModel)]="usuarioActual.username" 
+                 placeholder="Nombre de usuario" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" 
+                 [(ngModel)]="usuarioActual.email" 
+                 placeholder="correo@ejemplo.com" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombreCompleto">Nombre Completo:</label>
+          <input type="text" id="nombreCompleto" name="nombreCompleto" 
+                 [(ngModel)]="usuarioActual.nombreCompleto" 
+                 placeholder="Nombre completo">
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Contraseña:</label>
+          <input type="password" id="password" name="password" 
+                 [(ngModel)]="usuarioActual.password" 
+                 [placeholder]="modoEdicion ? 'Dejar vacío para mantener actual' : 'Contraseña'">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="role">Rol:</label>
+          <select id="role" name="role" [(ngModel)]="usuarioActual.role">
+            <option value="USER">Usuario</option>
+            <option value="ADMIN">Administrador</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="enabled">Estado:</label>
+          <select id="enabled" name="enabled" [(ngModel)]="usuarioActual.enabled">
+            <option [value]="true">Activo</option>
+            <option [value]="false">Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="btn-guardar" [disabled]="loading">
+          {{ loading ? '⏳ Guardando...' : (modoEdicion ? '💾 Actualizar' : '➕ Crear') }}
+        </button>
+        <button type="button" class="btn-cancelar" (click)="cancelarFormulario()">
+          ❌ Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading && !mostrarFormulario" class="loading">
+    <p>⏳ Cargando usuarios...</p>
+  </div>
+
+  <!-- Lista de usuarios -->
   <div *ngIf="!loading" class="usuarios-lista">
-
     <div class="usuario-item" *ngFor="let user of users">
       <div class="usuario-info">
-        <h3>{{ user.username }}</h3>
-        <p>{{ user.email }}</p>
+        <h3>👤 {{ user.username }}</h3>
+        <p>📧 {{ user.email }}</p>
+        <p>👨‍💼 {{ user.nombreCompleto || 'Sin nombre' }}</p>
         <span class="rol" [class.admin]="user.role === 'ADMIN'">{{ user.role }}</span>
+        <span class="estado" [class.inactivo]="!user.enabled">
+          {{ user.enabled ? '🟢 Activo' : '🔴 Inactivo' }}
+        </span>
+      </div>
+      
+      <div class="usuario-acciones">
+        <button class="btn-editar" (click)="editarUsuario(user)">✏️ Editar</button>
+        <button class="btn-eliminar" (click)="eliminarUsuario(user)">🗑️ Eliminar</button>
       </div>
     </div>
     
     <div *ngIf="users.length === 0" class="no-usuarios">
-      <p>No hay usuarios registrados</p>
+      <p>📭 No hay usuarios registrados</p>
+      <button class="btn-crear-primero" (click)="nuevoUsuario()">➕ Crear el primer usuario</button>
     </div>
-
   </div>
+
 </div>
