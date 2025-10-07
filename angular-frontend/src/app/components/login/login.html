@@ -1,0 +1,61 @@
+<!-- Página de Login SIMPLE -->
+<div class="login-container">
+  <div class="login-card">
+    <h2>🔐 Iniciar Sesión</h2>
+    
+    <!-- Mostrar mensaje de error si hay uno -->
+    <div *ngIf="mensajeError" class="error-message">
+      ❌ {{ mensajeError }}
+    </div>
+    
+    <!-- Formulario simple -->
+    <form (ngSubmit)="iniciarSesion()">
+      
+      <!-- Campo Usuario -->
+      <div class="campo">
+        <label for="usuario">Usuario:</label>
+        <input 
+          type="text" 
+          id="usuario" 
+          name="usuario"
+          [(ngModel)]="usuario" 
+          placeholder="Ingresa tu usuario"
+          required>
+      </div>
+      
+      <!-- Campo Contraseña -->
+      <div class="campo">
+        <label for="password">Contraseña:</label>
+        <div class="password-container">
+          <input 
+            [type]="mostrarPassword ? 'text' : 'password'" 
+            id="password" 
+            name="password"
+            [(ngModel)]="password" 
+            placeholder="Ingresa tu contraseña"
+            required>
+          <button type="button" class="toggle-password" (click)="togglePassword()">
+            {{ mostrarPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+      </div>
+      
+      <!-- Botón de Login -->
+      <button 
+        type="submit" 
+        class="login-button"
+        [disabled]="cargando">
+        {{ cargando ? '⏳ Verificando...' : '🚀 Ingresar' }}
+      </button>
+      
+    </form>
+    
+    <!-- Usuarios de prueba -->
+    <div class="usuarios-prueba">
+      <h3>👤 Usuarios de Prueba:</h3>
+      <p><strong>admin</strong> / admin123</p>
+      <p><strong>usuario</strong> / user123</p>
+    </div>
+    
+  </div>
+</div>

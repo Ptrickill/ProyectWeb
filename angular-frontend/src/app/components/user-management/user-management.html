@@ -1,0 +1,26 @@
+<div class="usuarios-container">
+  <div class="usuarios-header">
+    <h2>Lista de Usuarios</h2>
+    <p>Usuarios registrados en el sistema</p>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando usuarios...</p>
+  </div>
+
+  <div *ngIf="!loading" class="usuarios-lista">
+
+    <div class="usuario-item" *ngFor="let user of users">
+      <div class="usuario-info">
+        <h3>{{ user.username }}</h3>
+        <p>{{ user.email }}</p>
+        <span class="rol" [class.admin]="user.role === 'ADMIN'">{{ user.role }}</span>
+      </div>
+    </div>
+    
+    <div *ngIf="users.length === 0" class="no-usuarios">
+      <p>No hay usuarios registrados</p>
+    </div>
+
+  </div>
+</div>

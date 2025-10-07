@@ -1,0 +1,154 @@
+/* Estilos SIMPLES para el componente de login */
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+}
+
+.login-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-title {
+  color: #4e73df;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.campo {
+  margin-bottom: 1rem;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+.campo input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: #4e73df;
+  box-shadow: 0 0 5px rgba(78, 115, 223, 0.3);
+}
+
+.password-container {
+  position: relative;
+  display: flex;
+}
+
+.password-container input {
+  flex: 1;
+  border-radius: 5px 0 0 5px;
+}
+
+.toggle-password {
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-left: none;
+  border-radius: 0 5px 5px 0;
+  background: #f8f9fa;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.toggle-password:hover {
+  background: #e9ecef;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #4e73df;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.login-button:hover:not(:disabled) {
+  background: #3e63cf;
+  transform: translateY(-1px);
+}
+
+.login-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  border: 1px solid #f5c6cb;
+}
+
+.usuarios-prueba {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.usuarios-prueba h3 {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.usuarios-prueba p {
+  margin: 0.3rem 0;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Animación suave */
+.login-card {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .login-card {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .login-title {
+    font-size: 1.5rem;
+  }
+}

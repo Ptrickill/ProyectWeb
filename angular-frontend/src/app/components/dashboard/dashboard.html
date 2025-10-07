@@ -1,0 +1,28 @@
+<div class="dashboard-simple">
+  <div class="header">
+    <h1>¡Bienvenido {{ usuario?.username }}!</h1>
+    <p>Sistema de Gestión de Usuarios</p>
+  </div>
+
+  
+  <div class="info-usuario">
+    <div class="usuario-card">
+      <h3>Información del Usuario</h3>
+      <p><strong>Usuario:</strong> {{ usuario?.username }}</p>
+      <p><strong>Email:</strong> {{ usuario?.email }}</p>
+      <p><strong>Rol:</strong> <span class="rol" [class.admin]="usuario?.role === 'ADMIN'">{{ usuario?.role }}</span></p>
+    </div>
+  </div>
+
+  <div class="acciones">
+    <h3>¿Qué quieres hacer?</h3>
+    <div class="botones">
+      <button class="btn-accion" (click)="irAUsuarios()">
+        Ver Lista de Usuarios
+      </button>
+      <button class="btn-accion btn-logout" (click)="cerrarSesion()">
+        Cerrar Sesión
+      </button>
+    </div>
+  </div>
+</div>
