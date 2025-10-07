@@ -15,11 +15,11 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Crear usuario administrador por defecto si no existe
+        // usuario adm prueba
         if (!userService.existsByUsername("admin")) {
             User admin = new User();
             admin.setUsername("admin");
-            admin.setPassword("admin123"); // Contraseña simple sin encriptar
+            admin.setPassword("admin123"); 
             admin.setEmail("admin@ingenieriaweb.com");
             admin.setNombreCompleto("Administrador del Sistema");
             admin.setRole(User.Role.ADMIN);
@@ -29,11 +29,11 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println(" Usuario administrador creado: admin / admin123");
         }
         
-        // Crear usuario normal de prueba si no existe
+        // usuario prueba
         if (!userService.existsByUsername("usuario")) {
             User user = new User();
             user.setUsername("usuario");
-            user.setPassword("user123"); // Contraseña simple sin encriptar
+            user.setPassword("user123"); 
             user.setEmail("usuario@ingenieriaweb.com");
             user.setNombreCompleto("Usuario de Prueba");
             user.setRole(User.Role.USER);

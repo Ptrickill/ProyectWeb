@@ -10,39 +10,36 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-// Servicio SIMPLIFICADO para usuarios - Sin encriptación de contraseñas
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    // ========== OPERACIONES CRUD SIMPLES ==========
-
-    // CREATE - Crear usuario (contraseña sin encriptar)
+    // Operaciones CRUD
     public User createUser(User user) {
         // Establecer fecha de creación
         user.setFechaCreacion(LocalDateTime.now());
-        // Guardar usuario con contraseña en texto plano (SIMPLE)
+        // Guardar usuario con contraseña
         return userRepository.save(user);
     }
 
-    // READ - Obtener todos los usuarios
+    // Obtener todos los usuarios
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // READ - Obtener usuario por ID
+    // Obtener usuario por ID
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
     }
 
-    // READ - Obtener usuario por username
+    // Obtener usuario por username
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    // UPDATE - Actualizar usuario
+    // Actualizar usuario
     public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -61,14 +58,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // DELETE - Eliminar usuario
+    // Eliminar usuario
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         userRepository.delete(user);
     }
 
-    // ========== MÉTODOS DE VALIDACIÓN ==========
+    // Metodos de validacion
 
     // Verificar si username ya existe
     public boolean existsByUsername(String username) {
@@ -80,7 +77,7 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    // ========== MÉTODOS DE BÚSQUEDA ==========
+    // Metodo de busqueda
 
     // Obtener usuarios activos
     public List<User> getActiveUsers() {
@@ -97,9 +94,9 @@ public class UserService {
         return userRepository.findByNombreCompletoContainingIgnoreCase(nombre);
     }
 
-    // ========== MÉTODOS ESPECIALES ==========
+    // Metodos de estado y cambio de contraseña
 
-    // Cambiar estado de usuario (activar/desactivar)
+    // Cambiar estado de usuario
     public User toggleUserStatus(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -107,12 +104,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // Cambiar contraseña (comparación simple)
+    // Cambiar contraseña
     public boolean changePassword(String username, String oldPassword, String newPassword) {
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            // Verificar contraseña actual (comparación simple)
+            // Verificar contraseña actual
             if (user.getPassword().equals(oldPassword)) {
                 user.setPassword(newPassword);
                 userRepository.save(user);

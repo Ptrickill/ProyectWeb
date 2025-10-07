@@ -11,7 +11,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-// Configuración de seguridad SIMPLIFICADA - Sin JWT, solo CORS
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -33,11 +32,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Habilitar CORS
+            // Comunicacion entre frontend y backend
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             // Deshabilitar CSRF (no lo necesitamos para API REST)
             .csrf(csrf -> csrf.disable())
-            // Permitir todas las peticiones (sin autenticación por ahora)
+            // Permitir todas las peticiones
             .authorizeHttpRequests(auth -> auth
                 .anyRequest().permitAll()
             );

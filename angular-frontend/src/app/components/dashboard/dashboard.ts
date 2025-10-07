@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
-// Dashboard SUPER SIMPLE - Fácil de entender
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule],
@@ -30,12 +29,12 @@ export class Dashboard implements OnInit {
     console.log('Usuario en dashboard:', this.usuario);
   }
 
-  // Método simple para ir a lista de usuarios
+  // Método para ir a lista de usuarios
   irAUsuarios(): void {
     this.router.navigate(['/usuarios']);
   }
 
-  // Método simple para logout
+  // Método para logout
   cerrarSesion(): void {
     if (confirm('¿Seguro que quieres cerrar sesión?')) {
       this.authService.logout();

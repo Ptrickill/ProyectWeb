@@ -1,14 +1,17 @@
-<!-- Gestión Completa de Usuarios CRUD -->
 <div class="usuarios-container">
   
-  <!-- Header con botón para crear nuevo usuario -->
   <div class="usuarios-header">
-    <h2>📋 Gestión de Usuarios</h2>
-    <p>Administra los usuarios del sistema</p>
-    <button class="btn-nuevo" (click)="nuevoUsuario()">➕ Nuevo Usuario</button>
+    <div class="header-info">
+      <h2>📋 Gestión de Usuarios</h2>
+      <p>Administra los usuarios del sistema</p>
+    </div>
+    <div class="header-buttons">
+      <button class="btn-dashboard" (click)="irAlDashboard()">🏠 Dashboard</button>
+      <button class="btn-nuevo" (click)="nuevoUsuario()">➕ Nuevo Usuario</button>
+      <button class="btn-logout" (click)="cerrarSesion()">🚪 Cerrar Sesión</button>
+    </div>
   </div>
 
-  <!-- Mensajes de éxito y error -->
   <div *ngIf="mensajeExito" class="mensaje-exito">
     ✅ {{ mensajeExito }}
     <button (click)="limpiarMensajes()" class="btn-cerrar">×</button>
@@ -19,7 +22,6 @@
     <button (click)="limpiarMensajes()" class="btn-cerrar">×</button>
   </div>
 
-  <!-- Formulario para crear/editar usuario -->
   <div *ngIf="mostrarFormulario" class="formulario-usuario">
     <h3>{{ modoEdicion ? '✏️ Editar Usuario' : '➕ Crear Nuevo Usuario' }}</h3>
     
@@ -85,12 +87,10 @@
     </form>
   </div>
 
-  <!-- Loading -->
   <div *ngIf="loading && !mostrarFormulario" class="loading">
     <p>⏳ Cargando usuarios...</p>
   </div>
 
-  <!-- Lista de usuarios -->
   <div *ngIf="!loading" class="usuarios-lista">
     <div class="usuario-item" *ngFor="let user of users">
       <div class="usuario-info">

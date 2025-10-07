@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     
-    // Método para Spring Security (buscar por username)
+    // Método para buscar por uesrname
     Optional<User> findByUsername(String username);
     
     // Buscar por email

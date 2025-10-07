@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-// Controlador SIMPLIFICADO para usuarios - Sin seguridad compleja
+
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -21,7 +21,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // ========== OBTENER TODOS LOS USUARIOS ==========
+    // Usuarios
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllUsers() {
         Map<String, Object> response = new HashMap<>();
@@ -38,7 +38,7 @@ public class UserController {
         }
     }
 
-    // ========== OBTENER USUARIO POR ID ==========
+    // Ussuario por ID
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
@@ -60,7 +60,7 @@ public class UserController {
         }
     }
 
-    // ========== CREAR NUEVO USUARIO ==========
+    // Creacion Usuario
     @PostMapping
     public ResponseEntity<Map<String, Object>> createUser(@RequestBody UserCreateRequest request) {
         Map<String, Object> response = new HashMap<>();
@@ -101,7 +101,7 @@ public class UserController {
         }
     }
 
-    // ========== ACTUALIZAR USUARIO ==========
+    // Edicion
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest request) {
         Map<String, Object> response = new HashMap<>();
@@ -116,7 +116,7 @@ public class UserController {
 
             User existingUser = existingUserOpt.get();
 
-            // Validar username único (si se está cambiando)
+            // Validar username único
             if (!existingUser.getUsername().equals(request.getUsername()) &&
                 userService.existsByUsername(request.getUsername())) {
                 response.put("success", false);
@@ -124,7 +124,7 @@ public class UserController {
                 return ResponseEntity.ok(response);
             }
 
-            // Validar email único (si se está cambiando)
+            // Validar email único
             if (!existingUser.getEmail().equals(request.getEmail()) &&
                 userService.existsByEmail(request.getEmail())) {
                 response.put("success", false);
@@ -157,7 +157,7 @@ public class UserController {
         }
     }
 
-    // ========== ELIMINAR USUARIO ==========
+    // Elliminar Usuario
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
@@ -182,7 +182,7 @@ public class UserController {
         }
     }
 
-    // ========== CLASES PARA REQUESTS ==========
+    // Clases para crear y actualizar
 
     public static class UserCreateRequest {
         private String username;
@@ -209,7 +209,7 @@ public class UserController {
 
     public static class UserUpdateRequest {
         private String username;
-        private String password; // Opcional - solo si se quiere cambiar
+        private String password;
         private String email;
         private String nombreCompleto;
         private User.Role role;

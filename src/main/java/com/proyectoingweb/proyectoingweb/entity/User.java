@@ -49,7 +49,7 @@ public class User implements UserDetails {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion = LocalDateTime.now();
     
-    // Enum para roles
+    // Roles
     public enum Role {
         USER, ADMIN
     }
@@ -64,7 +64,7 @@ public class User implements UserDetails {
         this.nombreCompleto = nombreCompleto;
     }
     
-    // Métodos de UserDetails (requeridos por Spring Security)
+    // Métodos de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
 
-// Servicio de Usuarios SUPER SIMPLE - Fácil de entender
+// Servicio de usuario
 @Injectable({
   providedIn: 'root'
 })
@@ -12,15 +12,13 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // ========== MÉTODO SIMPLE PARA OBTENER USUARIOS ==========
-  
-  // Obtener todos los usuarios - MÉTODO SIMPLE
+  // Obtener todos los usuarios
   getAllUsers(): Observable<any> {
     console.log('Obteniendo usuarios del backend...');
     return this.http.get<any>(this.API_URL);
   }
 
-  // ========== MÉTODOS CRUD COMPLETOS ==========
+  // Crud
   
   // Crear nuevo usuario
   createUser(usuario: any): Observable<any> {

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
 
 @Component({
@@ -21,7 +23,11 @@ export class UserManagement implements OnInit {
   mensajeError = '';
   mensajeExito = '';
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   // Inicializar formulario vacío
   inicializarFormulario() {
@@ -44,12 +50,10 @@ export class UserManagement implements OnInit {
     this.loading = true;
     this.userService.getAllUsers().subscribe({
       next: (response) => {
-        // El backend devuelve {users: [...], total: X, success: true}
-        // Necesitamos extraer solo el array de users
+
         if (response && response.users && Array.isArray(response.users)) {
           this.users = response.users;
         } else if (Array.isArray(response)) {
-          // Por si acaso el backend devuelve directamente el array
           this.users = response;
         } else {
           this.users = [];
@@ -59,7 +63,6 @@ export class UserManagement implements OnInit {
       },
       error: (error) => {
         console.error('Error cargando usuarios:', error);
-        // Si hay error, mostramos usuarios de ejemplo
         this.users = [
           {
             id: 1,
@@ -83,9 +86,9 @@ export class UserManagement implements OnInit {
     });
   }
 
-  // ========== MÉTODOS PARA CRUD ==========
+  // Metodos crud
 
-  // Mostrar formulario para crear nuevo usuario
+  // Formulario para crear nuevo usuario
   nuevoUsuario() {
     this.modoEdicion = false;
     this.mostrarFormulario = true;
@@ -94,18 +97,18 @@ export class UserManagement implements OnInit {
     this.mensajeExito = '';
   }
 
-  // Mostrar formulario para editar usuario existente
+  // Formulario para editar usuario existente
   editarUsuario(usuario: any) {
     this.modoEdicion = true;
     this.mostrarFormulario = true;
-    this.usuarioActual = { ...usuario }; // Copiar los datos del usuario
+    this.usuarioActual = { ...usuario }; // Copia del usuario actual
     this.mensajeError = '';
     this.mensajeExito = '';
   }
 
   // Guardar usuario (crear o actualizar)
   guardarUsuario() {
-    // Validaciones básicas
+    // Validaciones
     if (!this.usuarioActual.username || !this.usuarioActual.email) {
       this.mensajeError = 'Usuario y email son obligatorios';
       return;
@@ -196,5 +199,19 @@ export class UserManagement implements OnInit {
   limpiarMensajes() {
     this.mensajeError = '';
     this.mensajeExito = '';
+  }
+
+  // Navegacion
+
+  // Ir al dashboard
+  irAlDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  // Cerrar sesion
+  cerrarSesion() {
+    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+      this.authService.logout();
+    }
   }
 }

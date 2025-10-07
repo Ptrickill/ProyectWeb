@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-// Controlador SIMPLIFICADO para autenticación (sin JWT)
+// Controlador
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -20,7 +20,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    // ========== LOGIN SIMPLE ==========
+    // Login
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
         Map<String, Object> response = new HashMap<>();
@@ -32,7 +32,7 @@ public class AuthController {
             if (usuarioOpt.isPresent()) {
                 User usuario = usuarioOpt.get();
                 
-                // Verificar contraseña (SIMPLE - sin encriptación por ahora)
+                // Verificar contraseña
                 if (usuario.getPassword().equals(loginRequest.getPassword())) {
                     // Login exitoso
                     response.put("success", true);
@@ -63,13 +63,13 @@ public class AuthController {
         }
     }
 
-    // ========== REGISTRO SIMPLE (Opcional) ==========
+    // Registro
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody RegisterRequest registerRequest) {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            // Verificar si el usuario ya existe
+            // Verificacion si el usuario ya existe
             if (userService.existsByUsername(registerRequest.getUsername())) {
                 response.put("success", false);
                 response.put("message", "El usuario ya existe");
@@ -82,13 +82,13 @@ public class AuthController {
                 return ResponseEntity.ok(response);
             }
 
-            // Crear nuevo usuario
+            // Creacion nuevo usuario
             User newUser = new User();
             newUser.setUsername(registerRequest.getUsername());
-            newUser.setPassword(registerRequest.getPassword()); // Sin encriptar por ahora
+            newUser.setPassword(registerRequest.getPassword());
             newUser.setEmail(registerRequest.getEmail());
             newUser.setNombreCompleto(registerRequest.getNombreCompleto());
-            newUser.setRole(User.Role.USER); // Por defecto USER
+            newUser.setRole(User.Role.USER);
 
             User savedUser = userService.createUser(newUser);
 
@@ -113,14 +113,13 @@ public class AuthController {
         }
     }
 
-    // ========== CLASES SIMPLES PARA REQUESTS ==========
+    // Clases simple para requests
     
     // Clase para recibir datos de login
     public static class LoginRequest {
         private String username;
         private String password;
-
-        // Constructores
+ 
         public LoginRequest() {}
         
         public LoginRequest(String username, String password) {
@@ -142,7 +141,6 @@ public class AuthController {
         private String email;
         private String nombreCompleto;
 
-        // Constructores
         public RegisterRequest() {}
 
         // Getters y Setters
