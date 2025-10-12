@@ -1,6 +1,4 @@
-// ===== MODELOS SIMPLES - Fáciles de entender =====
-
-// Modelo principal para el Usuario
+// Modelo Usuario
 export interface User {
   id?: number;
   username: string;
@@ -10,13 +8,13 @@ export interface User {
   enabled: boolean;
 }
 
-// Modelo simple para login
+// Modelo login
 export interface LoginRequest {
   username: string;
   password: string;
 }
 
-// Modelo simple para crear usuario
+// Modelo crear usuario
 export interface RegisterRequest {
   username: string;
   password: string;

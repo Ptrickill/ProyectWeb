@@ -18,23 +18,23 @@ public class UserService {
 
     // Operaciones CRUD
     public User createUser(User user) {
-        // Establecer fecha de creación
+        // Fecha de creación
         user.setFechaCreacion(LocalDateTime.now());
         // Guardar usuario con contraseña
         return userRepository.save(user);
     }
 
-    // Obtener todos los usuarios
+    // Todos los usuarios
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // Obtener usuario por ID
+    // Usuario por ID
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
     }
 
-    // Obtener usuario por username
+    // Usuario por username
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -50,7 +50,7 @@ public class UserService {
         user.setRole(userDetails.getRole());
         user.setEnabled(userDetails.getEnabled());
 
-        // Solo actualizar contraseña si se proporciona una nueva (sin encriptar)
+        // Solo actualizar contraseña si se proporciona una nueva
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
             user.setPassword(userDetails.getPassword());
         }

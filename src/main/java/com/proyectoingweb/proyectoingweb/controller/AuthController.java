@@ -113,7 +113,7 @@ public class AuthController {
         }
     }
 
-    // Clases simple para requests
+    // Clases para Requests
     
     // Clase para recibir datos de login
     public static class LoginRequest {
