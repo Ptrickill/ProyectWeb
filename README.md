@@ -67,6 +67,3 @@ DELETE /api/users/{id}  # Eliminar usuario
 
 **Danny** - [Ptrickill](https://github.com/Ptrickill)
 
-## 📄 Licencia
-
-MIT License
