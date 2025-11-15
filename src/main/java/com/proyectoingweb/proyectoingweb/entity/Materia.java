@@ -1,5 +1,6 @@
 package com.proyectoingweb.proyectoingweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -23,9 +24,11 @@ public class Materia {
     private String area; // Matemáticas, Lengua, Ciencias, Sociales, Arte, Tecnología
     
     // Relaciones
+    @JsonIgnore
     @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Nota> notas = new ArrayList<>();
     
+    @JsonIgnore
     @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CarreraMateria> carreraMaterias = new ArrayList<>();
     

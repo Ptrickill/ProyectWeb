@@ -29,6 +29,7 @@ public class Pregunta {
     private Habilidad habilidad;
     
     // Relaciones
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "pregunta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RespuestaHabilidad> respuestas = new ArrayList<>();
     
