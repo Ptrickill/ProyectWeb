@@ -12,9 +12,10 @@
   align-items: center;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #4e73df, #6c5ce7);
-  border-radius: 10px;
-  color: white;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .header-info {
@@ -22,14 +23,16 @@
 }
 
 .header-info h2 {
-  font-size: 2rem;
+  font-size: 1.75rem;
   margin: 0;
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .header-info p {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   margin: 0.5rem 0 0 0;
-  opacity: 0.9;
+  color: #6c757d;
 }
 
 .header-buttons {
@@ -39,43 +42,41 @@
 }
 
 .btn-dashboard, .btn-nuevo, .btn-logout {
-  padding: 0.75rem 1.5rem;
+  padding: 0.65rem 1.25rem;
   color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-size: 0.95rem;
 }
 
 .btn-dashboard {
-  background: rgba(255, 255, 255, 0.15);
+  background: #6c757d;
 }
 
 .btn-dashboard:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
+  background: #5a6268;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .btn-nuevo {
-  background: rgba(76, 175, 80, 0.3);
-  border-color: rgba(76, 175, 80, 0.5);
+  background: #2c3e50;
 }
 
 .btn-nuevo:hover {
-  background: rgba(76, 175, 80, 0.4);
-  transform: translateY(-2px);
+  background: #34495e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .btn-logout {
-  background: rgba(244, 67, 54, 0.3);
-  border-color: rgba(244, 67, 54, 0.5);
+  background: #dc3545;
 }
 
 .btn-logout:hover {
-  background: rgba(244, 67, 54, 0.4);
-  transform: translateY(-2px);
+  background: #c82333;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
 }
 
 /* Mensajes */

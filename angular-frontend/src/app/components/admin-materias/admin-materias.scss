@@ -1,0 +1,201 @@
+.admin-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding: 2rem;
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      color: #2c3e50;
+      margin: 0;
+      font-size: 1.75rem;
+      flex: 1;
+      font-weight: 600;
+    }
+
+    .btn-back, .btn-nuevo {
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .btn-back {
+      background: #6c757d;
+      color: white;
+
+      &:hover {
+        background: #5a6268;
+      }
+    }
+
+    .btn-nuevo {
+      background: #2c3e50;
+      color: white;
+      font-weight: 500;
+
+      &:hover {
+        background: #34495e;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  .mensaje-exito {
+    background: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .mensaje-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .form-card, .tabla-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-weight: 500;
+      }
+
+      input, select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: none;
+          border-color: #667eea;
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+
+      button {
+        flex: 1;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+
+        &.btn-guardar {
+          background: #667eea;
+          color: white;
+
+          &:disabled {
+            background: #ccc;
+          }
+        }
+
+        &.btn-cancelar {
+          background: #6c757d;
+          color: white;
+        }
+      }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      thead {
+        background: #f8f9fa;
+
+        th {
+          padding: 1rem;
+          text-align: left;
+          font-weight: 600;
+        }
+      }
+
+      tbody tr {
+        border-bottom: 1px solid #dee2e6;
+
+        &:hover {
+          background: #f8f9fa;
+        }
+
+        td {
+          padding: 1rem;
+
+          .badge-codigo {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+          }
+
+          .badge-area {
+            background: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+          }
+
+          &.acciones {
+            display: flex;
+            gap: 0.5rem;
+
+            button {
+              padding: 0.5rem 1rem;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+
+              &.btn-editar {
+                background: #ffc107;
+                color: #333;
+              }
+
+              &.btn-eliminar {
+                background: #dc3545;
+                color: white;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .loading, .no-data {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+  }
+}

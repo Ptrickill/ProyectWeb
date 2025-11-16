@@ -1,0 +1,300 @@
+.test-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      color: white;
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .btn-back {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateX(-5px);
+      }
+    }
+  }
+
+  .progreso-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    h3 {
+      margin: 0 0 1rem 0;
+      color: #333;
+    }
+
+    .barra-progreso {
+      width: 100%;
+      height: 30px;
+      background: #e0e0e0;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+
+      .barra-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transition: width 0.3s ease;
+      }
+    }
+
+    p {
+      margin: 0;
+      color: #666;
+      text-align: center;
+      font-weight: 500;
+    }
+  }
+
+  .mensaje-exito {
+    background: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #c3e6cb;
+  }
+
+  .mensaje-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #f5c6cb;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 12px;
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .habilidades-container {
+    .habilidad-section {
+      margin-bottom: 2rem;
+
+      .habilidad-header {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px 12px 0 0;
+        border-bottom: 3px solid #667eea;
+
+        h2 {
+          margin: 0 0 0.5rem 0;
+          color: #333;
+          font-size: 1.5rem;
+        }
+
+        p {
+          margin: 0;
+          color: #666;
+        }
+      }
+
+      .preguntas-list {
+        .pregunta-card {
+          background: white;
+          padding: 1.5rem;
+          margin-bottom: 1rem;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s;
+
+          &:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          }
+
+          .pregunta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+
+            .tipo-badge {
+              background: #e7f3ff;
+              color: #004085;
+              padding: 0.5rem 1rem;
+              border-radius: 20px;
+              font-size: 0.9rem;
+              font-weight: 500;
+            }
+
+            .numero {
+              color: #666;
+              font-size: 0.9rem;
+            }
+          }
+
+          .pregunta-texto {
+            color: #333;
+            font-size: 1.1rem;
+            margin: 0 0 1.5rem 0;
+            line-height: 1.6;
+          }
+
+          .opciones-respuesta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+
+            .opcion {
+              flex: 1;
+              min-width: 150px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              padding: 1rem;
+              border: 2px solid #e0e0e0;
+              border-radius: 8px;
+              cursor: pointer;
+              transition: all 0.3s;
+
+              &:hover {
+                border-color: #667eea;
+                background: #f8f9fa;
+              }
+
+              input[type="radio"] {
+                display: none;
+              }
+
+              input[type="radio"]:checked + .opcion-label {
+                background: #667eea;
+                color: white;
+              }
+
+              input[type="radio"]:checked ~ .opcion-descripcion {
+                color: #667eea;
+                font-weight: bold;
+              }
+
+              .opcion-label {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: #f0f0f0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 0.5rem;
+                transition: all 0.3s;
+              }
+
+              .opcion-descripcion {
+                font-size: 0.85rem;
+                color: #666;
+                text-align: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .guardar-section {
+    margin: 2rem 0;
+    text-align: center;
+
+    .btn-guardar {
+      background: white;
+      color: #667eea;
+      border: 2px solid white;
+      padding: 1rem 3rem;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover:not(:disabled) {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+      }
+
+      &:disabled {
+        background: #ccc;
+        color: #666;
+        border-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .info-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid #ffc107;
+
+    p {
+      margin: 0.5rem 0;
+      color: #333;
+      line-height: 1.6;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+
+    .header h1 {
+      font-size: 1.5rem;
+    }
+
+    .opciones-respuesta {
+      flex-direction: column !important;
+
+      .opcion {
+        min-width: 100% !important;
+      }
+    }
+  }
+}

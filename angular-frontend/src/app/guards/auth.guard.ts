@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
@@ -12,14 +12,28 @@ export class AuthGuard implements CanActivate {
     private router: Router
   ) {}
 
-  canActivate(): boolean {
-    // Verificar si está logueado usando nuestro método simple
-    if (this.authService.estaLogueado()) {
-      return true;
-    } else {
-      // Redirigir al login si no está autenticado
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    // Verificar si está logueado
+    if (!this.authService.estaLogueado()) {
+      console.log('⛔ No autenticado - Redirigiendo a login');
       this.router.navigate(['/login']);
       return false;
     }
+
+    // Verificar roles si la ruta los requiere
+    const rolesRequeridos = route.data['roles'] as string[];
+    
+    if (rolesRequeridos && rolesRequeridos.length > 0) {
+      const usuario = this.authService.obtenerUsuario();
+      const tienePermiso = rolesRequeridos.includes(usuario?.role || '');
+      
+      if (!tienePermiso) {
+        console.log('⛔ Sin permisos - Rol requerido:', rolesRequeridos);
+        this.router.navigate(['/acceso-denegado']);
+        return false;
+      }
+    }
+
+    return true;
   }
 }

@@ -1,0 +1,123 @@
+<div class="resultados-container">
+  <div class="header">
+    <button class="btn-back" (click)="volverAlDashboard()">← Volver</button>
+    <h1>🎯 Mis Resultados Vocacionales</h1>
+  </div>
+
+  <!-- Indicador de progreso -->
+  <div class="progreso-card">
+    <h3>📊 Tu Progreso</h3>
+    <div class="progreso-items">
+      <div class="progreso-item" [class.completo]="tieneNotas">
+        <span class="icono">{{ tieneNotas ? '✅' : '⭕' }}</span>
+        <span>Notas Académicas</span>
+      </div>
+      <div class="progreso-item" [class.completo]="tieneTestHabilidades">
+        <span class="icono">{{ tieneTestHabilidades ? '✅' : '⭕' }}</span>
+        <span>Test de Habilidades</span>
+      </div>
+      <div class="progreso-item" [class.completo]="tieneIntereses">
+        <span class="icono">{{ tieneIntereses ? '✅' : '⭕' }}</span>
+        <span>Intereses Vocacionales</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="loading">
+    <div class="spinner"></div>
+    <p>Calculando tus resultados...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="error-box">
+    <p>⚠️ {{ error }}</p>
+    <button class="btn-retry" (click)="verificarProgresoYCargarResultados()">Reintentar</button>
+  </div>
+
+  <!-- Progreso incompleto -->
+  <div *ngIf="!cargando && !error && !progresoCompleto" class="incomplete-box">
+    <h2>⚠️ Proceso Incompleto</h2>
+    <p>Para obtener tus resultados vocacionales, necesitas completar todos los pasos:</p>
+    
+    <div class="pasos-pendientes">
+      <div class="paso" *ngIf="!tieneNotas">
+        <span class="numero">1</span>
+        <div class="contenido">
+          <h4>Registrar Notas Académicas</h4>
+          <p>Ingresa tus calificaciones en las materias</p>
+          <button class="btn-accion" (click)="irANotas()">Ir a Notas</button>
+        </div>
+      </div>
+
+      <div class="paso" *ngIf="!tieneTestHabilidades">
+        <span class="numero">2</span>
+        <div class="contenido">
+          <h4>Completar Test de Habilidades</h4>
+          <p>Responde preguntas sobre tus capacidades</p>
+          <button class="btn-accion" (click)="irATest()">Ir a Test</button>
+        </div>
+      </div>
+
+      <div class="paso" *ngIf="!tieneIntereses">
+        <span class="numero">3</span>
+        <div class="contenido">
+          <h4>Definir Intereses Vocacionales</h4>
+          <p>Indica qué carreras te interesan</p>
+          <button class="btn-accion" (click)="irAIntereses()">Ir a Intereses</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultados -->
+  <div *ngIf="!cargando && !error && progresoCompleto && resultados.length > 0" class="resultados-lista">
+    <h2>🏆 Top 3 Carreras Recomendadas</h2>
+    <p class="formula-info">
+      Calculado con: <strong>50% Académico + 30% Habilidades + 20% Intereses</strong>
+    </p>
+
+    <div class="carreras-grid">
+      <div 
+        *ngFor="let resultado of resultados; let i = index" 
+        class="carrera-card"
+        [class.primera]="i === 0"
+        [class.segunda]="i === 1"
+        [class.tercera]="i === 2"
+      >
+        <div class="medalla">{{ obtenerMedalla(i) }}</div>
+        <div class="posicion">Posición {{ i + 1 }}</div>
+        
+        <h3>{{ resultado.carrera.nombre }}</h3>
+        <p class="codigo">Código: {{ resultado.carrera.codigo }}</p>
+        <p class="descripcion">{{ resultado.carrera.descripcion }}</p>
+
+        <div class="puntajes">
+          <div class="puntaje-item">
+            <span class="label">📚 Académico (50%):</span>
+            <span class="valor">{{ resultado.puntajeAcademico.toFixed(2) }}</span>
+          </div>
+          <div class="puntaje-item">
+            <span class="label">💪 Habilidades (30%):</span>
+            <span class="valor">{{ resultado.puntajeHabilidades.toFixed(2) }}</span>
+          </div>
+          <div class="puntaje-item">
+            <span class="label">❤️ Intereses (20%):</span>
+            <span class="valor">{{ resultado.puntajeAfinidad.toFixed(2) }}</span>
+          </div>
+          <div class="puntaje-total">
+            <span class="label">🎯 Puntaje Total:</span>
+            <span class="valor total">{{ resultado.puntajeTotal.toFixed(2) }}%</span>
+          </div>
+        </div>
+
+        <div class="mensaje">{{ resultado.mensaje }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!cargando && !error && progresoCompleto && resultados.length === 0" class="no-resultados">
+    <p>No se encontraron carreras recomendadas. Verifica tus datos.</p>
+  </div>
+</div>

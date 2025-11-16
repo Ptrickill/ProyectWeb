@@ -1,28 +1,140 @@
-<div class="dashboard-simple">
-  <div class="header">
-    <h1>¡Bienvenido {{ usuario?.username }}!</h1>
-    <p>Sistema de Gestión de Usuarios</p>
-  </div>
-
+<div class="dashboard-container">
   
-  <div class="info-usuario">
-    <div class="usuario-card">
-      <h3>Información del Usuario</h3>
-      <p><strong>Usuario:</strong> {{ usuario?.username }}</p>
-      <p><strong>Email:</strong> {{ usuario?.email }}</p>
-      <p><strong>Rol:</strong> <span class="rol" [class.admin]="usuario?.role === 'ADMIN'">{{ usuario?.role }}</span></p>
+  <!-- Header común -->
+  <div class="header">
+    <div class="welcome">
+      <h1>Bienvenido/a {{ usuario?.nombreCompleto || usuario?.username }}</h1>
+      <p *ngIf="esAdmin" class="subtitle">Panel de Administración - Sistema Vocacional 2.0</p>
+      <p *ngIf="esEstudiante" class="subtitle">Tu camino hacia la carrera ideal</p>
+    </div>
+    <button class="btn-logout" (click)="cerrarSesion()">
+      Cerrar Sesión
+    </button>
+  </div>
+
+  <!-- Información del usuario -->
+  <div class="user-info-card">
+    <div class="info-item">
+      <span class="label">Usuario:</span>
+      <span class="value">{{ usuario?.username }}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Email:</span>
+      <span class="value">{{ usuario?.email }}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Rol:</span>
+      <span class="value" [class.role-admin]="esAdmin" [class.role-user]="esEstudiante">
+        {{ usuario?.role === 'ADMIN' ? 'Administrador' : 'Estudiante' }}
+      </span>
     </div>
   </div>
 
-  <div class="acciones">
-    <h3>¿Qué quieres hacer?</h3>
-    <div class="botones">
-      <button class="btn-accion" (click)="irAUsuarios()">
-        Ver Lista de Usuarios
-      </button>
-      <button class="btn-accion btn-logout" (click)="cerrarSesion()">
-        Cerrar Sesión
-      </button>
+  <!-- ========== DASHBOARD DE ADMINISTRADOR ========== -->
+  <div *ngIf="esAdmin" class="admin-dashboard">
+    <h2>Gestión del Sistema</h2>
+    
+    <div class="cards-grid">
+      
+      <!-- Gestión de Carreras -->
+      <div class="action-card" (click)="irAGestionCarreras()">
+        <div class="card-icon">📋</div>
+        <h3>Carreras</h3>
+        <p>Administrar catálogo de carreras profesionales</p>
+      </div>
+
+      <!-- Gestión de Materias -->
+      <div class="action-card" (click)="irAGestionMaterias()">
+        <div class="card-icon">📊</div>
+        <h3>Materias</h3>
+        <p>Configurar materias académicas del sistema</p>
+      </div>
+
+      <!-- Gestión de Habilidades -->
+      <div class="action-card" (click)="irAGestionHabilidades()">
+        <div class="card-icon">✓</div>
+        <h3>Habilidades</h3>
+        <p>Definir habilidades evaluadas en el test</p>
+      </div>
+
+      <!-- Gestión de Preguntas -->
+      <div class="action-card" (click)="irAGestionPreguntas()">
+        <div class="card-icon">?</div>
+        <h3>Preguntas</h3>
+        <p>Crear y editar preguntas del test</p>
+      </div>
+
+      <!-- Gestión de Pesos -->
+      <div class="action-card" (click)="irAGestionPesos()">
+        <div class="card-icon">⚙</div>
+        <h3>Configuración</h3>
+        <p>Configurar ponderaciones de carreras</p>
+      </div>
+
+      <!-- Gestión de Usuarios -->
+      <div class="action-card" (click)="irAGestionUsuarios()">
+        <div class="card-icon">👤</div>
+        <h3>Usuarios</h3>
+        <p>Administrar usuarios del sistema</p>
+      </div>
+      
     </div>
   </div>
+
+  <!-- ========== DASHBOARD DE ESTUDIANTE ========== -->
+  <div *ngIf="esEstudiante" class="student-dashboard">
+    <h2>📊 Tu Proceso Vocacional</h2>
+    
+    <div class="cards-grid">
+      
+      <!-- Mi Perfil -->
+      <div class="action-card" (click)="irAMiPerfil()">
+        <div class="card-icon">👤</div>
+        <h3>Mi Perfil</h3>
+        <p>Información personal y académica</p>
+      </div>
+
+      <!-- Mis Notas -->
+      <div class="action-card" (click)="irAMisNotas()">
+        <div class="card-icon">📝</div>
+        <h3>Mis Calificaciones</h3>
+        <p>Registro de notas académicas</p>
+      </div>
+
+      <!-- Test de Habilidades -->
+      <div class="action-card highlight" (click)="irATestHabilidades()">
+        <div class="card-icon">🧠</div>
+        <h3>Test de Habilidades</h3>
+        <p>Evalúa tus competencias</p>
+      </div>
+
+      <!-- Mis Intereses -->
+      <div class="action-card" (click)="irAMisIntereses()">
+        <div class="card-icon">❤️</div>
+        <h3>Áreas de Interés</h3>
+        <p>Selecciona tus preferencias</p>
+      </div>
+
+      <!-- Mis Resultados (CORE) -->
+      <div class="action-card primary" (click)="irAMisResultados()">
+        <div class="card-icon">🎯</div>
+        <h3>Mis Resultados</h3>
+        <p>Top 3 carreras recomendadas</p>
+      </div>
+      
+    </div>
+
+    <!-- Instrucciones para estudiante -->
+    <div class="instructions">
+      <h3>📋 ¿Cómo funciona?</h3>
+      <ol>
+        <li>Completa tu <strong>perfil personal</strong></li>
+        <li>Registra tus <strong>calificaciones</strong> académicas</li>
+        <li>Responde el <strong>test de habilidades</strong></li>
+        <li>Selecciona tus <strong>áreas de interés</strong></li>
+        <li>Consulta tus <strong>resultados vocacionales</strong> 🎯</li>
+      </ol>
+    </div>
+  </div>
+
 </div>

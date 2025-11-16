@@ -1,0 +1,294 @@
+<div class="admin-pesos-container">
+  <div class="header">
+    <button class="btn-back" (click)="volverAlDashboard()">← Volver</button>
+    <h2>Configuración de Pesos</h2>
+  </div>
+
+  <div class="tabs">
+    <button 
+      class="tab" 
+      [class.active]="tabActiva === 'materias'"
+      (click)="cambiarTab('materias')">
+      Pesos por Materia
+    </button>
+    <button 
+      class="tab" 
+      [class.active]="tabActiva === 'habilidades'"
+      (click)="cambiarTab('habilidades')">
+      Pesos por Habilidad
+    </button>
+    <button 
+      class="tab" 
+      [class.active]="tabActiva === 'afinidades'"
+      (click)="cambiarTab('afinidades')">
+      Pesos por Afinidad
+    </button>
+  </div>
+
+  <div *ngIf="mensaje" class="alert alert-success">{{ mensaje }}</div>
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+
+  <!-- TAB MATERIAS -->
+  <div *ngIf="tabActiva === 'materias'" class="tab-content">
+    <div class="content-header">
+      <h3>Pesos de Materias por Carrera</h3>
+      <button class="btn-primary" (click)="mostrarNuevoFormulario()" *ngIf="!mostrarFormulario">
+        + Nuevo Peso
+      </button>
+    </div>
+
+    <div *ngIf="mostrarFormulario" class="form-container">
+      <h4>Asignar Peso a Materia</h4>
+      <form (ngSubmit)="guardarPesoMateria()">
+        <div class="form-group">
+          <label>Carrera *</label>
+          <select [(ngModel)]="nuevoPesoMateria.carreraId" name="carrera" required>
+            <option value="0">-- Selecciona carrera --</option>
+            <option *ngFor="let c of carreras" [value]="c.id">{{ c.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Materia *</label>
+          <select [(ngModel)]="nuevoPesoMateria.materiaId" name="materia" required>
+            <option value="0">-- Selecciona materia --</option>
+            <option *ngFor="let m of materias" [value]="m.id">{{ m.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Peso (0.0 - 1.0) *</label>
+          <input 
+            type="number" 
+            [(ngModel)]="nuevoPesoMateria.peso" 
+            name="peso" 
+            min="0" 
+            max="1" 
+            step="0.1" 
+            required
+            placeholder="Ej: 0.8">
+          <small>Valores más altos indican mayor importancia de esta materia para la carrera</small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar Peso' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="cancelarFormulario()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="table-container" *ngIf="!cargando">
+      <table *ngIf="pesosMaterias.length > 0">
+        <thead>
+          <tr>
+            <th>Carrera</th>
+            <th>Materia</th>
+            <th>Peso</th>
+            <th>Barra</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let peso of pesosMaterias">
+            <td>{{ peso.carreraNombre }}</td>
+            <td>{{ peso.materiaNombre }}</td>
+            <td>{{ peso.peso }}</td>
+            <td>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="peso.peso * 100"></div>
+              </div>
+            </td>
+            <td>
+              <button class="btn-danger" (click)="eliminarPesoMateria(peso.id!)">🗑️ Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="empty-state" *ngIf="pesosMaterias.length === 0">
+        No hay pesos de materias configurados. Haz clic en "Nuevo Peso" para comenzar.
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB HABILIDADES -->
+  <div *ngIf="tabActiva === 'habilidades'" class="tab-content">
+    <div class="content-header">
+      <h3>Pesos de Habilidades por Carrera</h3>
+      <button class="btn-primary" (click)="mostrarNuevoFormulario()" *ngIf="!mostrarFormulario">
+        + Nuevo Peso
+      </button>
+    </div>
+
+    <div *ngIf="mostrarFormulario" class="form-container">
+      <h4>Asignar Peso a Habilidad</h4>
+      <form (ngSubmit)="guardarPesoHabilidad()">
+        <div class="form-group">
+          <label>Carrera *</label>
+          <select [(ngModel)]="nuevoPesoHabilidad.carreraId" name="carrera" required>
+            <option value="0">-- Selecciona carrera --</option>
+            <option *ngFor="let c of carreras" [value]="c.id">{{ c.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Habilidad *</label>
+          <select [(ngModel)]="nuevoPesoHabilidad.habilidadId" name="habilidad" required>
+            <option value="0">-- Selecciona habilidad --</option>
+            <option *ngFor="let h of habilidades" [value]="h.id">{{ h.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Peso (0.0 - 1.0) *</label>
+          <input 
+            type="number" 
+            [(ngModel)]="nuevoPesoHabilidad.peso" 
+            name="peso" 
+            min="0" 
+            max="1" 
+            step="0.1" 
+            required
+            placeholder="Ej: 0.9">
+          <small>Valores más altos indican mayor importancia de esta habilidad para la carrera</small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar Peso' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="cancelarFormulario()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="table-container" *ngIf="!cargando">
+      <table *ngIf="pesosHabilidades.length > 0">
+        <thead>
+          <tr>
+            <th>Carrera</th>
+            <th>Habilidad</th>
+            <th>Peso</th>
+            <th>Barra</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let peso of pesosHabilidades">
+            <td>{{ peso.carreraNombre }}</td>
+            <td>{{ peso.habilidadNombre }}</td>
+            <td>{{ peso.peso }}</td>
+            <td>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="peso.peso * 100"></div>
+              </div>
+            </td>
+            <td>
+              <button class="btn-danger" (click)="eliminarPesoHabilidad(peso.id!)">🗑️ Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="empty-state" *ngIf="pesosHabilidades.length === 0">
+        No hay pesos de habilidades configurados. Haz clic en "Nuevo Peso" para comenzar.
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB AFINIDADES -->
+  <div *ngIf="tabActiva === 'afinidades'" class="tab-content">
+    <div class="content-header">
+      <h3>Pesos de Afinidades por Carrera</h3>
+      <button class="btn-primary" (click)="mostrarNuevoFormulario()" *ngIf="!mostrarFormulario">
+        + Nuevo Peso
+      </button>
+    </div>
+
+    <div *ngIf="mostrarFormulario" class="form-container">
+      <h4>Asignar Peso a Nivel de Interés</h4>
+      <form (ngSubmit)="guardarPesoAfinidad()">
+        <div class="form-group">
+          <label>Carrera *</label>
+          <select [(ngModel)]="nuevoPesoAfinidad.carreraId" name="carrera" required>
+            <option value="0">-- Selecciona carrera --</option>
+            <option *ngFor="let c of carreras" [value]="c.id">{{ c.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Nivel de Interés (1-5) *</label>
+          <select [(ngModel)]="nuevoPesoAfinidad.nivelInteres" name="nivelInteres" required>
+            <option value="0">-- Selecciona nivel --</option>
+            <option value="1">⭐ 1 - Bajo interés</option>
+            <option value="2">⭐⭐ 2 - Poco interés</option>
+            <option value="3">⭐⭐⭐ 3 - Interés moderado</option>
+            <option value="4">⭐⭐⭐⭐ 4 - Mucho interés</option>
+            <option value="5">⭐⭐⭐⭐⭐ 5 - Alto interés</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Peso (0.0 - 1.0) *</label>
+          <input 
+            type="number" 
+            [(ngModel)]="nuevoPesoAfinidad.peso" 
+            name="peso" 
+            min="0" 
+            max="1" 
+            step="0.1" 
+            required
+            placeholder="Ej: 0.7">
+          <small>Define cómo influye cada nivel de interés en la recomendación de esta carrera</small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar Peso' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="cancelarFormulario()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="table-container" *ngIf="!cargando">
+      <table *ngIf="pesosAfinidades.length > 0">
+        <thead>
+          <tr>
+            <th>Carrera</th>
+            <th>Nivel Interés</th>
+            <th>Peso</th>
+            <th>Barra</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let peso of pesosAfinidades">
+            <td>{{ peso.carreraNombre }}</td>
+            <td>
+              <span *ngIf="peso.nivelInteres === 1">⭐ 1 - Bajo</span>
+              <span *ngIf="peso.nivelInteres === 2">⭐⭐ 2 - Poco</span>
+              <span *ngIf="peso.nivelInteres === 3">⭐⭐⭐ 3 - Moderado</span>
+              <span *ngIf="peso.nivelInteres === 4">⭐⭐⭐⭐ 4 - Mucho</span>
+              <span *ngIf="peso.nivelInteres === 5">⭐⭐⭐⭐⭐ 5 - Alto</span>
+            </td>
+            <td>{{ peso.peso }}</td>
+            <td>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="peso.peso * 100"></div>
+              </div>
+            </td>
+            <td>
+              <button class="btn-danger" (click)="eliminarPesoAfinidad(peso.id!)">🗑️ Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="empty-state" *ngIf="pesosAfinidades.length === 0">
+        No hay pesos de afinidades configurados. Haz clic en "Nuevo Peso" para comenzar.
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading">Cargando configuración...</div>
+</div>

@@ -1,0 +1,78 @@
+<div class="test-container">
+  <div class="header">
+    <button class="btn-back" (click)="volverAlDashboard()">← Volver</button>
+    <h1>💪 Test de Habilidades</h1>
+  </div>
+
+  <!-- Progreso -->
+  <div class="progreso-card">
+    <h3>Progreso del Test</h3>
+    <div class="barra-progreso">
+      <div class="barra-fill" [style.width.%]="progresoPercentaje"></div>
+    </div>
+    <p>{{ progresoPercentaje.toFixed(0) }}% completado ({{ respuestas.size }} / {{ preguntas.length }})</p>
+  </div>
+
+  <!-- Mensajes -->
+  <div *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</div>
+  <div *ngIf="error" class="mensaje-error">{{ error }}</div>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando preguntas...</p>
+  </div>
+
+  <!-- Preguntas por Habilidad -->
+  <div *ngIf="!cargando" class="habilidades-container">
+    <div *ngFor="let habilidad of habilidades" class="habilidad-section">
+      <div class="habilidad-header">
+        <h2>{{ habilidad.nombre }}</h2>
+        <p>{{ habilidad.descripcion }}</p>
+      </div>
+
+      <div class="preguntas-list">
+        <div *ngFor="let pregunta of getPreguntasPorHabilidad(habilidad.id); let i = index" class="pregunta-card">
+          <div class="pregunta-header">
+            <span class="tipo-badge">{{ getIconoTipoPregunta(pregunta.tipoPregunta) }} {{ pregunta.tipoPregunta }}</span>
+            <span class="numero">Pregunta {{ i + 1 }}</span>
+          </div>
+          
+          <p class="pregunta-texto">{{ pregunta.pregunta }}</p>
+
+          <div class="opciones-respuesta">
+            <label class="opcion" *ngFor="let valor of [1, 2, 3, 4, 5]">
+              <input 
+                type="radio" 
+                [name]="'pregunta-' + pregunta.id"
+                [value]="valor"
+                [checked]="getRespuesta(pregunta.id) === valor"
+                (change)="seleccionarRespuesta(pregunta.id, valor)"
+              >
+              <span class="opcion-label">{{ valor }}</span>
+              <span class="opcion-descripcion">
+                {{ valor === 1 ? 'Muy bajo' : valor === 2 ? 'Bajo' : valor === 3 ? 'Medio' : valor === 4 ? 'Alto' : 'Muy alto' }}
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón Guardar -->
+  <div *ngIf="!cargando && preguntas.length > 0" class="guardar-section">
+    <button 
+      class="btn-guardar"
+      [disabled]="!testCompletado || guardando"
+      (click)="guardarTest()"
+    >
+      {{ guardando ? 'Guardando...' : testCompletado ? '💾 Guardar Test Completo' : '⚠️ Completa todas las preguntas' }}
+    </button>
+  </div>
+
+  <div class="info-box">
+    <p>💡 <strong>Importante:</strong> Tus respuestas de habilidades representan el <strong>30%</strong> de tu puntaje vocacional total.</p>
+    <p>📝 Responde con honestidad para obtener resultados más precisos.</p>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="admin-container">
+  <div class="header">
+    <button class="btn-back" (click)="volverAlDashboard()">← Volver</button>
+    <h1>Gestión de Materias</h1>
+    <button class="btn-nuevo" (click)="mostrarNuevoFormulario()" *ngIf="!mostrarFormulario">
+      + Nueva Materia
+    </button>
+  </div>
+
+  <div *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</div>
+  <div *ngIf="error" class="mensaje-error">{{ error }}</div>
+
+  <div *ngIf="mostrarFormulario" class="form-card">
+    <h3>{{ modoEdicion ? 'Editar Materia' : 'Nueva Materia' }}</h3>
+    <form (ngSubmit)="guardarMateria()" #materiaForm="ngForm">
+      <div class="form-group">
+        <label for="codigo">Código *</label>
+        <input 
+          type="text" 
+          id="codigo" 
+          name="codigo"
+          [(ngModel)]="nuevaMateria.codigo"
+          (focus)="limpiarMensajes()"
+          required
+          placeholder="Ej: MAT-101"
+          maxlength="10"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="nombre">Nombre *</label>
+        <input 
+          type="text" 
+          id="nombre" 
+          name="nombre"
+          [(ngModel)]="nuevaMateria.nombre"
+          (focus)="limpiarMensajes()"
+          required
+          placeholder="Ej: Matemáticas"
+          maxlength="100"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="area">Área *</label>
+        <select 
+          id="area" 
+          name="area"
+          [(ngModel)]="nuevaMateria.area"
+          (focus)="limpiarMensajes()"
+          required
+        >
+          <option value="">Seleccione un área</option>
+          <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-guardar" [disabled]="!materiaForm.form.valid || guardando">
+          {{ guardando ? 'Guardando...' : modoEdicion ? '💾 Actualizar' : '💾 Crear' }}
+        </button>
+        <button type="button" class="btn-cancelar" (click)="cancelarFormulario()">
+          ❌ Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="tabla-card">
+    <h3>Lista de Materias ({{ materias.length }})</h3>
+    
+    <div *ngIf="cargando" class="loading">Cargando materias...</div>
+
+    <div *ngIf="!cargando && materias.length === 0" class="no-data">
+      <p>📝 No hay materias registradas</p>
+    </div>
+
+    <table *ngIf="!cargando && materias.length > 0">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Área</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let materia of materias">
+          <td><span class="badge-codigo">{{ materia.codigo }}</span></td>
+          <td class="nombre">{{ materia.nombre }}</td>
+          <td><span class="badge-area">{{ materia.area }}</span></td>
+          <td class="acciones">
+            <button class="btn-editar" (click)="editarMateria(materia)">✏️ Editar</button>
+            <button class="btn-eliminar" (click)="eliminarMateria(materia.id!, materia.nombre)">🗑️ Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

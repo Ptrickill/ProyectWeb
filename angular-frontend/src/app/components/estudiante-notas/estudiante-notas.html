@@ -1,0 +1,146 @@
+<div class="notas-container">
+  <div class="header">
+    <button class="btn-back" (click)="volverAlDashboard()">← Volver</button>
+    <h1>📚 Mis Notas Académicas</h1>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="stats-card">
+    <div class="stat">
+      <span class="label">Total de Notas</span>
+      <span class="valor">{{ notas.length }}</span>
+    </div>
+    <div class="stat">
+      <span class="label">Promedio General</span>
+      <span class="valor" [class.bueno]="promedio >= 70" [class.regular]="promedio >= 50 && promedio < 70" [class.malo]="promedio < 50">
+        {{ promedio | number:'1.2-2' }}
+      </span>
+    </div>
+    <div class="stat">
+      <span class="label">Materias Restantes</span>
+      <span class="valor">{{ materias.length - notas.length }}</span>
+    </div>
+  </div>
+
+  <!-- Mensajes -->
+  <div *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</div>
+  <div *ngIf="error" class="mensaje-error">{{ error }}</div>
+
+  <!-- Botón agregar -->
+  <div class="acciones">
+    <button 
+      *ngIf="!mostrarFormulario && notas.length < materias.length" 
+      class="btn-agregar"
+      (click)="mostrarNuevoFormulario()"
+    >
+      ➕ Agregar Nota
+    </button>
+  </div>
+
+  <!-- Formulario -->
+  <div *ngIf="mostrarFormulario" class="form-card">
+    <h3>Nueva Nota</h3>
+    <form (ngSubmit)="agregarNota()" #notaForm="ngForm">
+      <div class="form-group">
+        <label for="materia">Materia *</label>
+        <select 
+          id="materia" 
+          name="materia"
+          [(ngModel)]="nuevaNota.materiaId"
+          required
+        >
+          <option value="0">Seleccione una materia</option>
+          <option 
+            *ngFor="let materia of materias" 
+            [value]="materia.id"
+            [disabled]="materiaYaRegistrada(materia.id)"
+          >
+            {{ materia.nombre }} ({{ materia.area }})
+            {{ materiaYaRegistrada(materia.id) ? '✅ Registrada' : '' }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="calificacion">Calificación (0-100) *</label>
+        <input 
+          type="number" 
+          id="calificacion" 
+          name="calificacion"
+          [(ngModel)]="nuevaNota.calificacion"
+          min="0"
+          max="100"
+          required
+          placeholder="Ej: 85"
+        >
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-guardar" [disabled]="!notaForm.form.valid || guardando">
+          {{ guardando ? 'Guardando...' : '💾 Guardar' }}
+        </button>
+        <button type="button" class="btn-cancelar" (click)="cancelarFormulario()">
+          ❌ Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de notas -->
+  <div class="tabla-card">
+    <h3>Notas Registradas</h3>
+    
+    <div *ngIf="cargando" class="loading">Cargando notas...</div>
+
+    <div *ngIf="!cargando && notas.length === 0" class="no-data">
+      <p>📝 Aún no has registrado ninguna nota</p>
+      <p>Haz clic en "Agregar Nota" para comenzar</p>
+    </div>
+
+    <table *ngIf="!cargando && notas.length > 0">
+      <thead>
+        <tr>
+          <th>Materia</th>
+          <th>Calificación</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let nota of notas">
+          <td>{{ nota.materiaNombre }}</td>
+          <td class="calificacion">
+            <span 
+              class="badge"
+              [class.aprobado]="nota.calificacion >= 70"
+              [class.regular]="nota.calificacion >= 50 && nota.calificacion < 70"
+              [class.reprobado]="nota.calificacion < 50"
+            >
+              {{ nota.calificacion }}
+            </span>
+          </td>
+          <td>
+            <span 
+              class="estado"
+              [class.aprobado]="nota.calificacion >= 70"
+              [class.regular]="nota.calificacion >= 50 && nota.calificacion < 70"
+              [class.reprobado]="nota.calificacion < 50"
+            >
+              {{ nota.calificacion >= 70 ? 'Aprobado' : nota.calificacion >= 50 ? 'Regular' : 'Reprobado' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-eliminar" (click)="eliminarNota(nota.id!)">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box">
+    <p>💡 <strong>Importante:</strong> Tus notas representan el <strong>50%</strong> de tu puntaje vocacional total.</p>
+    <p>Registra tus calificaciones en todas las materias para obtener resultados más precisos.</p>
+  </div>
+</div>

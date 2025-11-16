@@ -1,0 +1,298 @@
+.admin-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding: 2rem;
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      color: #2c3e50;
+      margin: 0;
+      font-size: 1.75rem;
+      flex: 1;
+      font-weight: 600;
+    }
+
+    .btn-back {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #5a6268;
+      }
+    }
+
+    .btn-nuevo {
+      background: #2c3e50;
+      color: white;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #34495e;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  .mensaje-exito {
+    background: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #c3e6cb;
+  }
+
+  .mensaje-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #f5c6cb;
+  }
+
+  .form-card {
+    background: white;
+    padding: 1.75rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-weight: 500;
+      }
+
+      input, textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        box-sizing: border-box;
+        font-family: inherit;
+
+        &:focus {
+          outline: none;
+          border-color: #667eea;
+        }
+      }
+
+      textarea {
+        resize: vertical;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+
+      button {
+        flex: 1;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &.btn-guardar {
+          background: #667eea;
+          color: white;
+
+          &:hover:not(:disabled) {
+            background: #5568d3;
+          }
+
+          &:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+          }
+        }
+
+        &.btn-cancelar {
+          background: #6c757d;
+          color: white;
+
+          &:hover {
+            background: #5a6268;
+          }
+        }
+      }
+    }
+  }
+
+  .tabla-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: #333;
+    }
+
+    .loading, .no-data {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      thead {
+        background: #f8f9fa;
+
+        th {
+          padding: 1rem;
+          text-align: left;
+          font-weight: 600;
+          color: #333;
+          border-bottom: 2px solid #dee2e6;
+        }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid #dee2e6;
+          transition: background 0.2s;
+
+          &:hover {
+            background: #f8f9fa;
+          }
+
+          td {
+            padding: 1rem;
+
+            &.nombre {
+              font-weight: 500;
+              color: #333;
+            }
+
+            &.descripcion {
+              color: #666;
+              font-size: 0.95rem;
+              max-width: 400px;
+            }
+
+            .badge-codigo {
+              background: #667eea;
+              color: white;
+              padding: 0.5rem 1rem;
+              border-radius: 20px;
+              font-weight: bold;
+              font-size: 0.9rem;
+            }
+
+            &.acciones {
+              display: flex;
+              gap: 0.5rem;
+
+              button {
+                padding: 0.5rem 1rem;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: all 0.3s;
+
+                &.btn-editar {
+                  background: #ffc107;
+                  color: #333;
+
+                  &:hover {
+                    background: #e0a800;
+                  }
+                }
+
+                &.btn-eliminar {
+                  background: #dc3545;
+                  color: white;
+
+                  &:hover {
+                    background: #c82333;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .info-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid #ffc107;
+
+    p {
+      margin: 0.5rem 0;
+      color: #333;
+      line-height: 1.6;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+
+    .header {
+      flex-wrap: wrap;
+
+      h1 {
+        font-size: 1.5rem;
+        width: 100%;
+      }
+    }
+
+    table {
+      font-size: 0.9rem;
+
+      th, td {
+        padding: 0.75rem !important;
+      }
+
+      .descripcion {
+        max-width: 200px !important;
+      }
+
+      .acciones {
+        flex-direction: column !important;
+      }
+    }
+  }
+}

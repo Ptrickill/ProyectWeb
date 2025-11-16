@@ -1,0 +1,96 @@
+<div class="intereses-container">
+  <div class="header">
+    <button class="btn-back" (click)="volverAlDashboard()">← Volver</button>
+    <h1>❤️ Mis Intereses Vocacionales</h1>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="stats-card">
+    <div class="stat">
+      <span class="label">Carreras Evaluadas</span>
+      <span class="valor">{{ carrerasConInteres }} / {{ carreras.length }}</span>
+    </div>
+    <div class="stat">
+      <span class="label">Ponderación</span>
+      <span class="valor">20%</span>
+    </div>
+  </div>
+
+  <!-- Mensajes -->
+  <div *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</div>
+  <div *ngIf="error" class="mensaje-error">{{ error }}</div>
+
+  <!-- Instrucciones -->
+  <div class="instrucciones">
+    <h3>📋 Instrucciones</h3>
+    <p>Indica tu nivel de interés en cada carrera usando la escala del 1 al 5:</p>
+    <ul>
+      <li>⭐ 1 = Muy bajo interés</li>
+      <li>⭐⭐ 2 = Bajo interés</li>
+      <li>⭐⭐⭐ 3 = Interés medio</li>
+      <li>⭐⭐⭐⭐ 4 = Alto interés</li>
+      <li>⭐⭐⭐⭐⭐ 5 = Muy alto interés</li>
+    </ul>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando carreras...</p>
+  </div>
+
+  <!-- Carreras -->
+  <div *ngIf="!cargando" class="carreras-grid">
+    <div *ngFor="let carrera of carreras" class="carrera-card">
+      <div class="carrera-info">
+        <h3>{{ carrera.nombre }}</h3>
+        <p class="codigo">Código: {{ carrera.codigo }}</p>
+        <p class="descripcion">{{ carrera.descripcion }}</p>
+      </div>
+
+      <div class="nivel-seleccion">
+        <p class="nivel-actual" [style.color]="getColorNivel(getNivelInteres(carrera.id))">
+          {{ getTextoNivel(getNivelInteres(carrera.id)) }}
+        </p>
+        
+        <div class="estrellas">
+          <button 
+            *ngFor="let nivel of [1, 2, 3, 4, 5]"
+            class="estrella"
+            [class.activa]="getNivelInteres(carrera.id) >= nivel"
+            (click)="seleccionarNivel(carrera.id, nivel)"
+          >
+            ⭐
+          </button>
+        </div>
+
+        <div class="niveles-rapidos">
+          <button 
+            *ngFor="let nivel of [1, 2, 3, 4, 5]"
+            class="btn-nivel"
+            [class.seleccionado]="getNivelInteres(carrera.id) === nivel"
+            (click)="seleccionarNivel(carrera.id, nivel)"
+          >
+            {{ nivel }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón Guardar -->
+  <div *ngIf="!cargando && carreras.length > 0" class="guardar-section">
+    <button 
+      class="btn-guardar"
+      [disabled]="carrerasConInteres === 0 || guardando"
+      (click)="guardarIntereses()"
+    >
+      {{ guardando ? 'Guardando...' : '💾 Guardar Intereses' }}
+    </button>
+  </div>
+
+  <div class="info-box">
+    <p>💡 <strong>Importante:</strong> Tus intereses vocacionales representan el <strong>20%</strong> de tu puntaje total.</p>
+    <p>🎯 No es necesario evaluar todas las carreras, solo aquellas que te interesan.</p>
+  </div>
+</div>
