@@ -1,6 +1,6 @@
 [build]
   base = "angular-frontend"
-  command = "npm run build -- --configuration production"
+  command = "npm install && npm run build -- --configuration=production"
   publish = "dist/angular-frontend/browser"
 
 [[redirects]]
