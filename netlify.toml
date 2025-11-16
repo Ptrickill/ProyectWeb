@@ -1,0 +1,12 @@
+[build]
+  base = "angular-frontend"
+  command = "npm run build"
+  publish = "dist/angular-frontend/browser"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "20"
