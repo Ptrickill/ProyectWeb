@@ -93,7 +93,7 @@ export class AdminPesos implements OnInit {
   }
 
   cargarCarreras() {
-    this.http.get<any>('http://localhost:8080/api/admin/carreras')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/carreras')
       .subscribe({
         next: (response) => {
           if (response.success && response.carreras) {
@@ -105,7 +105,7 @@ export class AdminPesos implements OnInit {
   }
 
   cargarMaterias() {
-    this.http.get<any>('http://localhost:8080/api/admin/materias')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/materias')
       .subscribe({
         next: (response) => {
           if (response.success && response.materias) {
@@ -117,7 +117,7 @@ export class AdminPesos implements OnInit {
   }
 
   cargarHabilidades() {
-    this.http.get<any>('http://localhost:8080/api/admin/habilidades')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/habilidades')
       .subscribe({
         next: (response) => {
           if (response.success && response.habilidades) {
@@ -132,7 +132,7 @@ export class AdminPesos implements OnInit {
     this.cargando = true;
     
     // Cargar pesos de materias
-    this.http.get<any>('http://localhost:8080/api/admin/pesos/carrera-materia')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-materia')
       .subscribe({
         next: (response) => {
           if (response.success && response.pesos) {
@@ -149,7 +149,7 @@ export class AdminPesos implements OnInit {
       });
 
     // Cargar pesos de habilidades
-    this.http.get<any>('http://localhost:8080/api/admin/pesos/carrera-habilidad')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-habilidad')
       .subscribe({
         next: (response) => {
           if (response.success && response.pesos) {
@@ -166,7 +166,7 @@ export class AdminPesos implements OnInit {
       });
 
     // Cargar pesos de afinidades
-    this.http.get<any>('http://localhost:8080/api/admin/pesos/carrera-afinidad')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-afinidad')
       .subscribe({
         next: (response) => {
           if (response.success && response.pesos) {
@@ -203,7 +203,7 @@ export class AdminPesos implements OnInit {
     }
 
     this.guardando = true;
-    this.http.post<any>('http://localhost:8080/api/admin/pesos/carrera-materia', this.nuevoPesoMateria)
+    this.http.post<any>('https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-materia', this.nuevoPesoMateria)
       .subscribe({
         next: (response) => {
           if (response.success) {
@@ -229,7 +229,7 @@ export class AdminPesos implements OnInit {
     }
 
     this.guardando = true;
-    this.http.post<any>('http://localhost:8080/api/admin/pesos/carrera-habilidad', this.nuevoPesoHabilidad)
+    this.http.post<any>('https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-habilidad', this.nuevoPesoHabilidad)
       .subscribe({
         next: (response) => {
           if (response.success) {
@@ -255,7 +255,7 @@ export class AdminPesos implements OnInit {
     }
 
     this.guardando = true;
-    this.http.post<any>('http://localhost:8080/api/admin/pesos/carrera-afinidad', this.nuevoPesoAfinidad)
+    this.http.post<any>('https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-afinidad', this.nuevoPesoAfinidad)
       .subscribe({
         next: (response) => {
           if (response.success) {
@@ -277,7 +277,7 @@ export class AdminPesos implements OnInit {
   eliminarPesoMateria(id: number) {
     if (!confirm('¿Eliminar este peso?')) return;
 
-    this.http.delete<any>(`http://localhost:8080/api/admin/pesos/carrera-materia/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-materia/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Peso eliminado';
@@ -292,7 +292,7 @@ export class AdminPesos implements OnInit {
   eliminarPesoHabilidad(id: number) {
     if (!confirm('¿Eliminar este peso?')) return;
 
-    this.http.delete<any>(`http://localhost:8080/api/admin/pesos/carrera-habilidad/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-habilidad/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Peso eliminado';
@@ -307,7 +307,7 @@ export class AdminPesos implements OnInit {
   eliminarPesoAfinidad(id: number) {
     if (!confirm('¿Eliminar este peso?')) return;
 
-    this.http.delete<any>(`http://localhost:8080/api/admin/pesos/carrera-afinidad/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/admin/pesos/carrera-afinidad/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Peso eliminado';
@@ -328,3 +328,5 @@ export class AdminPesos implements OnInit {
     this.router.navigate(['/admin/dashboard']);
   }
 }
+
+

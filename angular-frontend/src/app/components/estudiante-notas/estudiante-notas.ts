@@ -57,7 +57,7 @@ export class EstudianteNotas implements OnInit {
   }
 
   cargarMaterias() {
-    this.http.get<any>('http://localhost:8080/api/public/materias')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/public/materias')
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -75,7 +75,7 @@ export class EstudianteNotas implements OnInit {
     this.cargando = true;
     const usuario = this.authService.obtenerUsuario();
     
-    this.http.get<any>(`http://localhost:8080/api/notas/estudiante/${usuario?.id}`)
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/notas/estudiante/${usuario?.id}`)
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -112,7 +112,7 @@ export class EstudianteNotas implements OnInit {
     this.error = '';
     this.mensaje = '';
 
-    this.http.post<any>('http://localhost:8080/api/notas', this.nuevaNota)
+    this.http.post<any>('https://proyectweb-rech.onrender.com/api/notas', this.nuevaNota)
       .subscribe({
         next: (response) => {
           this.mensaje = '✅ Nota agregada exitosamente';
@@ -131,7 +131,7 @@ export class EstudianteNotas implements OnInit {
   eliminarNota(id: number) {
     if (!confirm('¿Estás seguro de eliminar esta nota?')) return;
 
-    this.http.delete<any>(`http://localhost:8080/api/notas/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/notas/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Nota eliminada';
@@ -176,3 +176,4 @@ export class EstudianteNotas implements OnInit {
     return suma / this.notas.length;
   }
 }
+

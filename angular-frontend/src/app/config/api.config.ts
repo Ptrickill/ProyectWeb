@@ -1,11 +1,8 @@
-import { environment } from '../../environments/environment';
-
 export class ApiConfig {
-  private static readonly LOCAL_API = 'http://localhost:8080';
-  private static readonly PROD_API = environment.apiUrl || 'http://localhost:8080';
+  private static readonly API_URL = 'https://proyectweb-rech.onrender.com';
 
   static getApiUrl(): string {
-    return environment.production ? this.PROD_API : this.LOCAL_API;
+    return this.API_URL;
   }
 
   static getEndpoint(path: string): string {

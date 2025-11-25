@@ -42,7 +42,7 @@ export class AdminMaterias implements OnInit {
 
   cargarMaterias() {
     this.cargando = true;
-    this.http.get<any>('http://localhost:8080/api/admin/materias')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/materias')
       .subscribe({
         next: (response) => {
           if (response.success && response.materias) {
@@ -86,7 +86,7 @@ export class AdminMaterias implements OnInit {
     this.limpiarMensajes();
 
     if (this.modoEdicion && this.nuevaMateria.id) {
-      this.http.put<any>(`http://localhost:8080/api/admin/materias/${this.nuevaMateria.id}`, this.nuevaMateria)
+      this.http.put<any>(`https://proyectweb-rech.onrender.com/api/admin/materias/${this.nuevaMateria.id}`, this.nuevaMateria)
         .subscribe({
           next: (response) => {
             this.mensaje = '✅ Materia actualizada exitosamente';
@@ -100,7 +100,7 @@ export class AdminMaterias implements OnInit {
           }
         });
     } else {
-      this.http.post<any>('http://localhost:8080/api/admin/materias', this.nuevaMateria)
+      this.http.post<any>('https://proyectweb-rech.onrender.com/api/admin/materias', this.nuevaMateria)
         .subscribe({
           next: (response) => {
             if (response.success) {
@@ -123,7 +123,7 @@ export class AdminMaterias implements OnInit {
   eliminarMateria(id: number, nombre: string) {
     if (!confirm(`¿Estás seguro de eliminar la materia "${nombre}"?`)) return;
 
-    this.http.delete<any>(`http://localhost:8080/api/admin/materias/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/admin/materias/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Materia eliminada exitosamente';
@@ -160,3 +160,4 @@ export class AdminMaterias implements OnInit {
     this.router.navigate(['/admin/dashboard']);
   }
 }
+

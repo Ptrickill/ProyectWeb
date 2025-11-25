@@ -66,7 +66,7 @@ export class EstudianteTest implements OnInit {
   }
 
   cargarHabilidades() {
-    this.http.get<any>('http://localhost:8080/api/public/habilidades')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/public/habilidades')
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -81,7 +81,7 @@ export class EstudianteTest implements OnInit {
 
   cargarPreguntas() {
     this.cargando = true;
-    this.http.get<any>('http://localhost:8080/api/estudiante/test/preguntas')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/estudiante/test/preguntas')
       .subscribe({
         next: (response) => {
           if (response.success && response.preguntas) {
@@ -104,7 +104,7 @@ export class EstudianteTest implements OnInit {
   }
 
   cargarRespuestasGuardadas() {
-    this.http.get<any>(`http://localhost:8080/api/estudiante/test/respuestas/${this.estudianteId}`)
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/test/respuestas/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
           if (response.success && response.respuestas) {
@@ -162,7 +162,7 @@ export class EstudianteTest implements OnInit {
       
       if (yaExiste) {
         // Actualizar (nota: backend no tiene PUT, solo POST)
-        this.http.post<any>('http://localhost:8080/api/estudiante/test/respuestas', respuesta)
+        this.http.post<any>('https://proyectweb-rech.onrender.com/api/estudiante/test/respuestas', respuesta)
           .subscribe({
             next: () => {
               guardadas++;
@@ -179,7 +179,7 @@ export class EstudianteTest implements OnInit {
           });
       } else {
         // Crear
-        this.http.post<any>('http://localhost:8080/api/estudiante/test/respuestas', respuesta)
+        this.http.post<any>('https://proyectweb-rech.onrender.com/api/estudiante/test/respuestas', respuesta)
           .subscribe({
             next: () => {
               guardadas++;
@@ -226,3 +226,4 @@ export class EstudianteTest implements OnInit {
     return (respondidas / this.preguntas.length) * 100;
   }
 }
+

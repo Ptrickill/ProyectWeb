@@ -1,0 +1,11 @@
+node_modules
+.angular
+.vscode
+*.log
+.git
+.gitignore
+README.md
+tsconfig.spec.json
+karma.conf.js
+src/**/*.spec.ts
+e2e

@@ -41,7 +41,7 @@ export class AdminCarreras implements OnInit {
 
   cargarCarreras() {
     this.cargando = true;
-    this.http.get<any>('http://localhost:8080/api/admin/carreras')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/carreras')
       .subscribe({
         next: (response) => {
           if (response.success && response.carreras) {
@@ -88,7 +88,7 @@ export class AdminCarreras implements OnInit {
 
     if (this.modoEdicion && this.nuevaCarrera.id) {
       // Actualizar
-      this.http.put<any>(`http://localhost:8080/api/admin/carreras/${this.nuevaCarrera.id}`, this.nuevaCarrera)
+      this.http.put<any>(`https://proyectweb-rech.onrender.com/api/admin/carreras/${this.nuevaCarrera.id}`, this.nuevaCarrera)
         .subscribe({
           next: (response) => {
             this.mensaje = '✅ Carrera actualizada exitosamente';
@@ -104,7 +104,7 @@ export class AdminCarreras implements OnInit {
         });
     } else {
       // Crear
-      this.http.post<any>('http://localhost:8080/api/admin/carreras', this.nuevaCarrera)
+      this.http.post<any>('https://proyectweb-rech.onrender.com/api/admin/carreras', this.nuevaCarrera)
         .subscribe({
           next: (response) => {
             if (response.success) {
@@ -130,7 +130,7 @@ export class AdminCarreras implements OnInit {
       return;
     }
 
-    this.http.delete<any>(`http://localhost:8080/api/admin/carreras/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/admin/carreras/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Carrera eliminada exitosamente';
@@ -168,3 +168,4 @@ export class AdminCarreras implements OnInit {
     this.router.navigate(['/admin/dashboard']);
   }
 }
+

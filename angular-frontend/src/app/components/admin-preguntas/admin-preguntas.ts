@@ -49,7 +49,7 @@ export class AdminPreguntas implements OnInit {
   }
 
   cargarHabilidades() {
-    this.http.get<any>('http://localhost:8080/api/admin/habilidades')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/habilidades')
       .subscribe({
         next: (response) => {
           if (response.success && response.habilidades) {
@@ -64,7 +64,7 @@ export class AdminPreguntas implements OnInit {
 
   cargarPreguntas() {
     this.cargando = true;
-    this.http.get<any>('http://localhost:8080/api/admin/preguntas')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/preguntas')
       .subscribe({
         next: (response) => {
           if (response.success && response.preguntas) {
@@ -120,7 +120,7 @@ export class AdminPreguntas implements OnInit {
     };
 
     if (this.modoEdicion && this.nuevaPregunta.id) {
-      this.http.put<any>(`http://localhost:8080/api/admin/preguntas/${this.nuevaPregunta.id}`, payload)
+      this.http.put<any>(`https://proyectweb-rech.onrender.com/api/admin/preguntas/${this.nuevaPregunta.id}`, payload)
         .subscribe({
           next: () => {
             this.mensaje = '✅ Pregunta actualizada exitosamente';
@@ -134,7 +134,7 @@ export class AdminPreguntas implements OnInit {
           }
         });
     } else {
-      this.http.post<any>('http://localhost:8080/api/admin/preguntas', payload)
+      this.http.post<any>('https://proyectweb-rech.onrender.com/api/admin/preguntas', payload)
         .subscribe({
           next: (response) => {
             if (response.success) {
@@ -157,7 +157,7 @@ export class AdminPreguntas implements OnInit {
   eliminarPregunta(id: number, pregunta: string) {
     if (!confirm(`¿Estás seguro de eliminar esta pregunta?\n\n"${pregunta}"`)) return;
 
-    this.http.delete<any>(`http://localhost:8080/api/admin/preguntas/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/admin/preguntas/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Pregunta eliminada exitosamente';
@@ -207,3 +207,4 @@ export class AdminPreguntas implements OnInit {
     this.router.navigate(['/admin/dashboard']);
   }
 }
+

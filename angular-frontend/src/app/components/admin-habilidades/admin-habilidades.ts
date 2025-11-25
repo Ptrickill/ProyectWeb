@@ -39,7 +39,7 @@ export class AdminHabilidades implements OnInit {
 
   cargarHabilidades() {
     this.cargando = true;
-    this.http.get<any>('http://localhost:8080/api/admin/habilidades')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/habilidades')
       .subscribe({
         next: (response) => {
           if (response.success && response.habilidades) {
@@ -83,7 +83,7 @@ export class AdminHabilidades implements OnInit {
     this.limpiarMensajes();
 
     if (this.modoEdicion && this.nuevaHabilidad.id) {
-      this.http.put<any>(`http://localhost:8080/api/admin/habilidades/${this.nuevaHabilidad.id}`, this.nuevaHabilidad)
+      this.http.put<any>(`https://proyectweb-rech.onrender.com/api/admin/habilidades/${this.nuevaHabilidad.id}`, this.nuevaHabilidad)
         .subscribe({
           next: () => {
             this.mensaje = '✅ Habilidad actualizada exitosamente';
@@ -97,7 +97,7 @@ export class AdminHabilidades implements OnInit {
           }
         });
     } else {
-      this.http.post<any>('http://localhost:8080/api/admin/habilidades', this.nuevaHabilidad)
+      this.http.post<any>('https://proyectweb-rech.onrender.com/api/admin/habilidades', this.nuevaHabilidad)
         .subscribe({
           next: (response) => {
             if (response.success) {
@@ -120,7 +120,7 @@ export class AdminHabilidades implements OnInit {
   eliminarHabilidad(id: number, nombre: string) {
     if (!confirm(`¿Estás seguro de eliminar la habilidad "${nombre}"?\n\nEsto también eliminará las preguntas asociadas.`)) return;
 
-    this.http.delete<any>(`http://localhost:8080/api/admin/habilidades/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/admin/habilidades/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Habilidad eliminada exitosamente';
@@ -153,3 +153,4 @@ export class AdminHabilidades implements OnInit {
     this.router.navigate(['/admin/dashboard']);
   }
 }
+

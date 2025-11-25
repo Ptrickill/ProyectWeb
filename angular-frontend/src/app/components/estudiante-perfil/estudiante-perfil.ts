@@ -51,7 +51,7 @@ export class EstudiantePerfil implements OnInit {
     }
 
     // Cargar datos del estudiante si existen
-    this.http.get<any>(`http://localhost:8080/api/estudiantes/usuario/${usuario.id}`)
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiantes/usuario/${usuario.id}`)
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -75,8 +75,8 @@ export class EstudiantePerfil implements OnInit {
     if (!usuario) return;
 
     const url = this.esNuevo 
-      ? `http://localhost:8080/api/estudiantes/usuario/${usuario.id}`
-      : `http://localhost:8080/api/estudiantes/${this.estudiante.id}`;
+      ? `https://proyectweb-rech.onrender.com/api/estudiantes/usuario/${usuario.id}`
+      : `https://proyectweb-rech.onrender.com/api/estudiantes/${this.estudiante.id}`;
 
     const metodo = this.esNuevo ? 'post' : 'put';
 
@@ -107,3 +107,4 @@ export class EstudiantePerfil implements OnInit {
     this.error = '';
   }
 }
+

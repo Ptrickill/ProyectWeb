@@ -60,7 +60,7 @@ export class EstudianteResultados implements OnInit {
     this.error = '';
 
     // Verificar progreso del estudiante
-    this.http.get<any>(`http://localhost:8080/api/estudiantes/${this.estudianteId}/progreso`)
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiantes/${this.estudianteId}/progreso`)
       .subscribe({
         next: (response) => {
           this.tieneNotas = response.tieneNotas || false;
@@ -83,7 +83,7 @@ export class EstudianteResultados implements OnInit {
   }
 
   calcularResultados() {
-    this.http.get<any>(`http://localhost:8080/api/resultados/estudiante/${this.estudianteId}`)
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/resultados/estudiante/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -133,3 +133,4 @@ export class EstudianteResultados implements OnInit {
     return this.tieneNotas && this.tieneTestHabilidades && this.tieneIntereses;
   }
 }
+

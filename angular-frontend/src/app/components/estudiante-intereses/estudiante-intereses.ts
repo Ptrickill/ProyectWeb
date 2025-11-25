@@ -58,7 +58,7 @@ export class EstudianteIntereses implements OnInit {
 
   cargarCarreras() {
     this.cargando = true;
-    this.http.get<any>('http://localhost:8080/api/public/carreras')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/public/carreras')
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -75,7 +75,7 @@ export class EstudianteIntereses implements OnInit {
   }
 
   cargarAfinidadesGuardadas() {
-    this.http.get<any>(`http://localhost:8080/api/afinidades/estudiante/${this.estudianteId}`)
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/afinidades/estudiante/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -125,7 +125,7 @@ export class EstudianteIntereses implements OnInit {
       
       if (yaExiste) {
         // Actualizar
-        this.http.put<any>(`http://localhost:8080/api/afinidades/${yaExiste.id}`, afinidad)
+        this.http.put<any>(`https://proyectweb-rech.onrender.com/api/afinidades/${yaExiste.id}`, afinidad)
           .subscribe({
             next: () => {
               guardadas++;
@@ -142,7 +142,7 @@ export class EstudianteIntereses implements OnInit {
           });
       } else {
         // Crear
-        this.http.post<any>('http://localhost:8080/api/afinidades', afinidad)
+        this.http.post<any>('https://proyectweb-rech.onrender.com/api/afinidades', afinidad)
           .subscribe({
             next: () => {
               guardadas++;
@@ -199,3 +199,4 @@ export class EstudianteIntereses implements OnInit {
     return this.afinidades.size;
   }
 }
+

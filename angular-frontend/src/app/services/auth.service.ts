@@ -35,7 +35,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:8080/api/auth';
+  private readonly API_URL = 'https://proyectweb-rech.onrender.com/api/auth';
   
   // BehaviorSubject para que otros componentes puedan suscribirse
   private usuarioSubject = new BehaviorSubject<Usuario | null>(null);
