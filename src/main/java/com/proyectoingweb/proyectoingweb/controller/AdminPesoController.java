@@ -37,6 +37,23 @@ public class AdminPesoController {
 
     // ==================== PESOS DE MATERIAS ====================
     
+    // Obtener TODOS los pesos de materias
+    @GetMapping("/carrera-materia")
+    public ResponseEntity<Map<String, Object>> getAllPesosMateria() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            List<CarreraMateria> pesos = carreraMateriaService.getAllPesos();
+            response.put("success", true);
+            response.put("pesos", pesos);
+            response.put("total", pesos.size());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al obtener pesos: " + e.getMessage());
+            return ResponseEntity.ok(response);
+        }
+    }
+    
     // Obtener pesos de materias de una carrera
     @GetMapping("/carrera-materia/{carreraId}")
     public ResponseEntity<Map<String, Object>> getPesosMateria(@PathVariable Long carreraId) {
@@ -121,6 +138,23 @@ public class AdminPesoController {
 
     // ==================== PESOS DE HABILIDADES ====================
     
+    // Obtener TODOS los pesos de habilidades
+    @GetMapping("/carrera-habilidad")
+    public ResponseEntity<Map<String, Object>> getAllPesosHabilidad() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            List<CarreraHabilidad> pesos = carreraHabilidadService.getAllPesos();
+            response.put("success", true);
+            response.put("pesos", pesos);
+            response.put("total", pesos.size());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al obtener pesos: " + e.getMessage());
+            return ResponseEntity.ok(response);
+        }
+    }
+    
     // Obtener pesos de habilidades de una carrera
     @GetMapping("/carrera-habilidad/{carreraId}")
     public ResponseEntity<Map<String, Object>> getPesosHabilidad(@PathVariable Long carreraId) {
@@ -204,6 +238,23 @@ public class AdminPesoController {
     }
 
     // ==================== PESOS DE AFINIDADES ====================
+    
+    // Obtener TODOS los pesos de afinidades
+    @GetMapping("/carrera-afinidad")
+    public ResponseEntity<Map<String, Object>> getAllPesosAfinidad() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            List<CarreraAfinidad> pesos = carreraAfinidadService.getAllPesos();
+            response.put("success", true);
+            response.put("pesos", pesos);
+            response.put("total", pesos.size());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al obtener pesos: " + e.getMessage());
+            return ResponseEntity.ok(response);
+        }
+    }
     
     // Obtener pesos de afinidades de una carrera
     @GetMapping("/carrera-afinidad/{carreraId}")
