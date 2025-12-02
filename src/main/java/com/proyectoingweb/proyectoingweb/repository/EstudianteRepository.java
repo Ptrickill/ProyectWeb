@@ -12,6 +12,9 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
     // Buscar estudiante por nombre
     Optional<Estudiante> findByNombre(String nombre);
     
+    // Buscar estudiante por usuario ID
+    Optional<Estudiante> findByUsuarioId(Long usuarioId);
+    
     // Verificar si existe un estudiante por nombre
     boolean existsByNombre(String nombre);
 }

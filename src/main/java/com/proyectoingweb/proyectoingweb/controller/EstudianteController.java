@@ -13,12 +13,90 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/estudiante")
-
+@RequestMapping("/api/estudiantes")
 public class EstudianteController {
 
     @Autowired
     private EstudianteService estudianteService;
+    
+    // Obtener estudiante por usuario ID
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<Map<String, Object>> obtenerPorUsuario(@PathVariable Long usuarioId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<Estudiante> estudiante = estudianteService.getEstudianteByUsuarioId(usuarioId);
+            if (estudiante.isPresent()) {
+                response.put("success", true);
+                response.put("data", estudiante.get());
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "Estudiante no encontrado");
+                return ResponseEntity.status(404).body(response);
+            }
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+    
+    // Crear perfil de estudiante asociado a un usuario
+    @PostMapping("/usuario/{usuarioId}")
+    public ResponseEntity<Map<String, Object>> crearPerfilPorUsuario(
+            @PathVariable Long usuarioId,
+            @RequestBody EstudianteRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Estudiante estudiante = new Estudiante();
+            estudiante.setNombre(request.getNombre());
+            estudiante.setApellido(request.getApellido());
+            estudiante.setEmail(request.getEmail());
+            estudiante.setTelefono(request.getTelefono());
+            estudiante.setDireccion(request.getDireccion());
+            estudiante.setFechaNacimiento(request.getFechaNacimiento());
+            estudiante.setUsuarioId(usuarioId);
+            
+            Estudiante saved = estudianteService.createEstudiante(estudiante);
+            
+            response.put("success", true);
+            response.put("message", "Perfil creado exitosamente");
+            response.put("data", saved);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al crear perfil: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+    
+    // Actualizar perfil de estudiante
+    @PutMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> actualizarEstudiante(
+            @PathVariable Long id,
+            @RequestBody EstudianteRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Estudiante estudianteActualizado = new Estudiante();
+            estudianteActualizado.setNombre(request.getNombre());
+            estudianteActualizado.setApellido(request.getApellido());
+            estudianteActualizado.setEmail(request.getEmail());
+            estudianteActualizado.setTelefono(request.getTelefono());
+            estudianteActualizado.setDireccion(request.getDireccion());
+            estudianteActualizado.setFechaNacimiento(request.getFechaNacimiento());
+            
+            Estudiante updated = estudianteService.updateEstudiante(id, estudianteActualizado);
+            
+            response.put("success", true);
+            response.put("message", "Perfil actualizado exitosamente");
+            response.put("data", updated);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al actualizar perfil: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
 
     // Crear perfil de estudiante
     @PostMapping("/perfil")
@@ -101,7 +179,7 @@ public class EstudianteController {
         }
     }
 
-    // Clase para request
+    // Clases para request
     public static class PerfilRequest {
         private String nombre;
         private Integer edad;
@@ -110,5 +188,27 @@ public class EstudianteController {
         public void setNombre(String nombre) { this.nombre = nombre; }
         public Integer getEdad() { return edad; }
         public void setEdad(Integer edad) { this.edad = edad; }
+    }
+    
+    public static class EstudianteRequest {
+        private String nombre;
+        private String apellido;
+        private String email;
+        private String telefono;
+        private String direccion;
+        private String fechaNacimiento;
+
+        public String getNombre() { return nombre; }
+        public void setNombre(String nombre) { this.nombre = nombre; }
+        public String getApellido() { return apellido; }
+        public void setApellido(String apellido) { this.apellido = apellido; }
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+        public String getTelefono() { return telefono; }
+        public void setTelefono(String telefono) { this.telefono = telefono; }
+        public String getDireccion() { return direccion; }
+        public void setDireccion(String direccion) { this.direccion = direccion; }
+        public String getFechaNacimiento() { return fechaNacimiento; }
+        public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
     }
 }

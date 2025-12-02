@@ -21,6 +21,24 @@ public class Estudiante {
     @Column(name = "nombre", nullable = false)
     private String nombre;
     
+    @Column(name = "apellido")
+    private String apellido;
+    
+    @Column(name = "email")
+    private String email;
+    
+    @Column(name = "telefono")
+    private String telefono;
+    
+    @Column(name = "direccion")
+    private String direccion;
+    
+    @Column(name = "fecha_nacimiento")
+    private String fechaNacimiento;
+    
+    @Column(name = "usuario_id")
+    private Long usuarioId;
+    
     @NotNull(message = "La edad es obligatoria")
     @Min(value = 15, message = "La edad mínima es 15 años")
     @Column(name = "edad", nullable = false)
@@ -73,6 +91,54 @@ public class Estudiante {
     
     public void setEdad(Integer edad) {
         this.edad = edad;
+    }
+    
+    public String getApellido() {
+        return apellido;
+    }
+    
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public String getTelefono() {
+        return telefono;
+    }
+    
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    
+    public String getDireccion() {
+        return direccion;
+    }
+    
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+    
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+    
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+    
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+    
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
     
     public LocalDateTime getFechaRegistro() {

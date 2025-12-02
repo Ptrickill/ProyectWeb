@@ -26,6 +26,11 @@ public class EstudianteService {
         return estudianteRepository.findById(id);
     }
     
+    // Obtener estudiante por usuario ID
+    public Optional<Estudiante> getEstudianteByUsuarioId(Long usuarioId) {
+        return estudianteRepository.findByUsuarioId(usuarioId);
+    }
+    
     // Crear nuevo estudiante
     public Estudiante createEstudiante(Estudiante estudiante) {
         return estudianteRepository.save(estudiante);
@@ -36,7 +41,14 @@ public class EstudianteService {
         return estudianteRepository.findById(id)
             .map(estudiante -> {
                 estudiante.setNombre(estudianteActualizado.getNombre());
-                estudiante.setEdad(estudianteActualizado.getEdad());
+                estudiante.setApellido(estudianteActualizado.getApellido());
+                estudiante.setEmail(estudianteActualizado.getEmail());
+                estudiante.setTelefono(estudianteActualizado.getTelefono());
+                estudiante.setDireccion(estudianteActualizado.getDireccion());
+                estudiante.setFechaNacimiento(estudianteActualizado.getFechaNacimiento());
+                if (estudianteActualizado.getEdad() != null) {
+                    estudiante.setEdad(estudianteActualizado.getEdad());
+                }
                 return estudianteRepository.save(estudiante);
             })
             .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
