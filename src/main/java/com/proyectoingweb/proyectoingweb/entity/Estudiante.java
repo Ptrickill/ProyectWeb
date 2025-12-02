@@ -41,7 +41,7 @@ public class Estudiante {
     
     @Min(value = 15, message = "La edad mínima es 15 años")
     @Column(name = "edad")
-    private Integer edad;
+    private Integer edad = 18; // Edad por defecto
     
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro = LocalDateTime.now();

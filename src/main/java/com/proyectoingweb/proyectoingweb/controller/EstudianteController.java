@@ -57,6 +57,14 @@ public class EstudianteController {
             estudiante.setFechaNacimiento(request.getFechaNacimiento());
             estudiante.setUsuarioId(usuarioId);
             
+            // Calcular edad desde fecha de nacimiento
+            if (request.getFechaNacimiento() != null && !request.getFechaNacimiento().isEmpty()) {
+                Integer edad = calcularEdad(request.getFechaNacimiento());
+                estudiante.setEdad(edad);
+            } else {
+                estudiante.setEdad(18); // Edad por defecto
+            }
+            
             Estudiante saved = estudianteService.createEstudiante(estudiante);
             
             response.put("success", true);
@@ -85,6 +93,12 @@ public class EstudianteController {
             estudianteActualizado.setDireccion(request.getDireccion());
             estudianteActualizado.setFechaNacimiento(request.getFechaNacimiento());
             
+            // Calcular edad desde fecha de nacimiento
+            if (request.getFechaNacimiento() != null && !request.getFechaNacimiento().isEmpty()) {
+                Integer edad = calcularEdad(request.getFechaNacimiento());
+                estudianteActualizado.setEdad(edad);
+            }
+            
             Estudiante updated = estudianteService.updateEstudiante(id, estudianteActualizado);
             
             response.put("success", true);
@@ -95,6 +109,45 @@ public class EstudianteController {
             response.put("success", false);
             response.put("message", "Error al actualizar perfil: " + e.getMessage());
             return ResponseEntity.status(500).body(response);
+        }
+    }
+    
+    // Método auxiliar para calcular edad desde fecha de nacimiento
+    private Integer calcularEdad(String fechaNacimiento) {
+        try {
+            // Formato esperado: "dd/MM/yyyy" o "yyyy-MM-dd"
+            String[] partes;
+            int año, mes, dia;
+            
+            if (fechaNacimiento.contains("/")) {
+                partes = fechaNacimiento.split("/");
+                dia = Integer.parseInt(partes[0]);
+                mes = Integer.parseInt(partes[1]);
+                año = Integer.parseInt(partes[2]);
+            } else if (fechaNacimiento.contains("-")) {
+                partes = fechaNacimiento.split("-");
+                año = Integer.parseInt(partes[0]);
+                mes = Integer.parseInt(partes[1]);
+                dia = Integer.parseInt(partes[2]);
+            } else {
+                return 18; // Edad por defecto si el formato es incorrecto
+            }
+            
+            // Calcular edad actual
+            int añoActual = java.time.Year.now().getValue();
+            int mesActual = java.time.LocalDate.now().getMonthValue();
+            int diaActual = java.time.LocalDate.now().getDayOfMonth();
+            
+            int edad = añoActual - año;
+            
+            // Ajustar si aún no ha cumplido años este año
+            if (mesActual < mes || (mesActual == mes && diaActual < dia)) {
+                edad--;
+            }
+            
+            return edad;
+        } catch (Exception e) {
+            return 18; // Edad por defecto en caso de error
         }
     }
 
