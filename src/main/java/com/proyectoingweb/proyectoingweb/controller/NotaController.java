@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/estudiante/notas")
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class NotaController {
 
     @Autowired

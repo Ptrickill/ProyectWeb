@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin/carreras")
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class AdminCarreraController {
 
     @Autowired

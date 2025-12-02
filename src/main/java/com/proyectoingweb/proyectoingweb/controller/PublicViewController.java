@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/view")
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class PublicViewController {
 
     @Autowired
