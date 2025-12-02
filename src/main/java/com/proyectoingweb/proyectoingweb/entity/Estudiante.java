@@ -1,9 +1,9 @@
 package com.proyectoingweb.proyectoingweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,15 +47,19 @@ public class Estudiante {
     private LocalDateTime fechaRegistro = LocalDateTime.now();
     
     // Relaciones
+    @JsonIgnore
     @OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Nota> notas = new ArrayList<>();
     
+    @JsonIgnore
     @OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RespuestaHabilidad> respuestasHabilidad = new ArrayList<>();
     
+    @JsonIgnore
     @OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Afinidad> afinidades = new ArrayList<>();
     
+    @JsonIgnore
     @OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Resultado> resultados = new ArrayList<>();
     
