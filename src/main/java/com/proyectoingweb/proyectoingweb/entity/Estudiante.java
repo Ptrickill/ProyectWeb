@@ -39,9 +39,8 @@ public class Estudiante {
     @Column(name = "usuario_id")
     private Long usuarioId;
     
-    @NotNull(message = "La edad es obligatoria")
     @Min(value = 15, message = "La edad mínima es 15 años")
-    @Column(name = "edad", nullable = false)
+    @Column(name = "edad")
     private Integer edad;
     
     @Column(name = "fecha_registro")
