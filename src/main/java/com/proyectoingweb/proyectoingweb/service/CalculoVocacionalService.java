@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Servicio para el cálculo vocacional del CORE del sistema.
@@ -167,7 +168,8 @@ public class CalculoVocacionalService {
     
     /**
      * PASO 3: Calcular componente afinidad (20%)
-     * Fórmula: Suma(PesosÁreasSeleccionadas) / SumaPesosTotales
+     * Fórmula: Promedio del nivel de interés del estudiante en la carrera
+     * nivelInteres va de 1-5, se normaliza dividiendo entre 5
      */
     public float calcularComponenteAfinidad(Long estudianteId, Long carreraId) {
         // Obtener afinidades del estudiante
@@ -177,37 +179,22 @@ public class CalculoVocacionalService {
             return 0.0f;
         }
         
-        // Obtener pesos de afinidades para esta carrera
-        List<CarreraAfinidad> pesosCarrera = carreraAfinidadRepository.findByCarreraId(carreraId);
+        // Buscar si el estudiante tiene afinidad con esta carrera específica
+        Optional<Afinidad> afinidadCarrera = afinidades.stream()
+            .filter(a -> a.getCarrera() != null && a.getCarrera().getId().equals(carreraId))
+            .findFirst();
         
-        if (pesosCarrera.isEmpty()) {
-            return 0.0f;
+        if (afinidadCarrera.isPresent()) {
+            // Si tiene afinidad directa con esta carrera, usar su nivel de interés
+            Integer nivelInteres = afinidadCarrera.get().getNivelInteres();
+            if (nivelInteres == null) return 0.0f;
+            
+            // Normalizar: nivel va de 1-5, convertir a 0-1
+            return nivelInteres / 5.0f;
         }
         
-        // Crear mapa de pesos por área
-        Map<String, Float> pesosPorArea = new HashMap<>();
-        float sumaPesosTotales = 0.0f;
-        
-        for (CarreraAfinidad ca : pesosCarrera) {
-            pesosPorArea.put(ca.getArea(), ca.getPeso());
-            sumaPesosTotales += ca.getPeso();
-        }
-        
-        // Sumar pesos de áreas seleccionadas por el estudiante
-        float sumaPesosSeleccionados = 0.0f;
-        
-        for (Afinidad afinidad : afinidades) {
-            if (pesosPorArea.containsKey(afinidad.getArea())) {
-                sumaPesosSeleccionados += pesosPorArea.get(afinidad.getArea());
-            }
-        }
-        
-        // Normalizar
-        if (sumaPesosTotales == 0) return 0.0f;
-        
-        float normalizado = sumaPesosSeleccionados / sumaPesosTotales;
-        
-        return normalizado;
+        // Si no tiene afinidad registrada para esta carrera, retornar 0
+        return 0.0f;
     }
     
     /**

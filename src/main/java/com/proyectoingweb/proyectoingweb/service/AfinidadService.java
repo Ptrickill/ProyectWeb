@@ -42,11 +42,11 @@ public class AfinidadService {
             throw new RuntimeException("El estudiante no existe");
         }
         
-        // Evitar afinidades duplicadas
-        if (afinidadRepository.existsByEstudianteIdAndArea(
-            afinidad.getEstudiante().getId(), afinidad.getArea())) {
+        // Evitar afinidades duplicadas (mismo estudiante y carrera)
+        if (afinidadRepository.existsByEstudianteIdAndCarreraId(
+            afinidad.getEstudiante().getId(), afinidad.getCarrera().getId())) {
             throw new RuntimeException(
-                "El estudiante ya tiene afinidad registrada en esta área"
+                "El estudiante ya tiene afinidad registrada para esta carrera"
             );
         }
         
@@ -57,7 +57,7 @@ public class AfinidadService {
     public Afinidad updateAfinidad(Long id, Afinidad afinidadActualizada) {
         return afinidadRepository.findById(id)
             .map(afinidad -> {
-                afinidad.setArea(afinidadActualizada.getArea());
+                afinidad.setNivelInteres(afinidadActualizada.getNivelInteres());
                 return afinidadRepository.save(afinidad);
             })
             .orElseThrow(() -> new RuntimeException("Afinidad no encontrada con ID: " + id));
