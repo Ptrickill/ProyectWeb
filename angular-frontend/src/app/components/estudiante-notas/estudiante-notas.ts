@@ -37,6 +37,7 @@ export class EstudianteNotas implements OnInit {
   mensaje: string = '';
   error: string = '';
   mostrarFormulario: boolean = false;
+  estudianteId: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -51,9 +52,25 @@ export class EstudianteNotas implements OnInit {
       return;
     }
 
-    this.nuevaNota.estudianteId = usuario.id;
-    this.cargarMaterias();
-    this.cargarNotas();
+    // Primero obtener el ID del estudiante desde el perfil
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiantes/usuario/${usuario.id}`)
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            this.estudianteId = response.data.id;
+            this.nuevaNota.estudianteId = this.estudianteId;
+            this.cargarMaterias();
+            this.cargarNotas();
+          } else {
+            this.error = 'Debes crear tu perfil primero';
+            setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
+          }
+        },
+        error: (err) => {
+          this.error = 'Debes crear tu perfil primero';
+          setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
+        }
+      });
   }
 
   cargarMaterias() {
@@ -72,14 +89,15 @@ export class EstudianteNotas implements OnInit {
   }
 
   cargarNotas() {
-    this.cargando = true;
-    const usuario = this.authService.obtenerUsuario();
+    if (!this.estudianteId) return;
     
-    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/notas/estudiante/${usuario?.id}`)
+    this.cargando = true;
+    
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/notas/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
-          if (response.success && response.data) {
-            this.notas = response.data.map((nota: any) => ({
+          if (response.success && response.notas) {
+            this.notas = response.notas.map((nota: any) => ({
               id: nota.id,
               estudianteId: nota.estudiante.id,
               materiaId: nota.materia.id,
@@ -112,7 +130,7 @@ export class EstudianteNotas implements OnInit {
     this.error = '';
     this.mensaje = '';
 
-    this.http.post<any>('https://proyectweb-rech.onrender.com/api/notas', this.nuevaNota)
+    this.http.post<any>('https://proyectweb-rech.onrender.com/api/estudiante/notas', this.nuevaNota)
       .subscribe({
         next: (response) => {
           this.mensaje = '✅ Nota agregada exitosamente';
@@ -131,7 +149,7 @@ export class EstudianteNotas implements OnInit {
   eliminarNota(id: number) {
     if (!confirm('¿Estás seguro de eliminar esta nota?')) return;
 
-    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/notas/${id}`)
+    this.http.delete<any>(`https://proyectweb-rech.onrender.com/api/estudiante/notas/${id}`)
       .subscribe({
         next: () => {
           this.mensaje = '✅ Nota eliminada';
