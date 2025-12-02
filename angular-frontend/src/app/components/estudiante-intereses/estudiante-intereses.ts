@@ -51,9 +51,24 @@ export class EstudianteIntereses implements OnInit {
       return;
     }
 
-    this.estudianteId = usuario.id;
-    this.cargarCarreras();
-    this.cargarAfinidadesGuardadas();
+    // Obtener el ID del estudiante desde el perfil
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiantes/usuario/${usuario.id}`)
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            this.estudianteId = response.data.id;
+            this.cargarCarreras();
+            this.cargarAfinidadesGuardadas();
+          } else {
+            this.error = 'Debes crear tu perfil primero';
+            setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
+          }
+        },
+        error: (err) => {
+          this.error = 'Debes crear tu perfil primero';
+          setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
+        }
+      });
   }
 
   cargarCarreras() {
@@ -75,7 +90,9 @@ export class EstudianteIntereses implements OnInit {
   }
 
   cargarAfinidadesGuardadas() {
-    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/afinidades/estudiante/${this.estudianteId}`)
+    if (!this.estudianteId) return;
+    
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/afinidades/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -125,7 +142,7 @@ export class EstudianteIntereses implements OnInit {
       
       if (yaExiste) {
         // Actualizar
-        this.http.put<any>(`https://proyectweb-rech.onrender.com/api/afinidades/${yaExiste.id}`, afinidad)
+        this.http.put<any>(`https://proyectweb-rech.onrender.com/api/estudiante/afinidades/${yaExiste.id}`, afinidad)
           .subscribe({
             next: () => {
               guardadas++;
@@ -142,7 +159,7 @@ export class EstudianteIntereses implements OnInit {
           });
       } else {
         // Crear
-        this.http.post<any>('https://proyectweb-rech.onrender.com/api/afinidades', afinidad)
+        this.http.post<any>('https://proyectweb-rech.onrender.com/api/estudiante/afinidades', afinidad)
           .subscribe({
             next: () => {
               guardadas++;

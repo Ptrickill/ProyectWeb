@@ -231,6 +231,43 @@ public class EstudianteController {
             return ResponseEntity.ok(response);
         }
     }
+    
+    // Verificar progreso del estudiante
+    @GetMapping("/{id}/progreso")
+    public ResponseEntity<Map<String, Object>> verificarProgreso(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<Estudiante> estudianteOpt = estudianteService.getEstudianteById(id);
+            if (!estudianteOpt.isPresent()) {
+                response.put("success", false);
+                response.put("message", "Estudiante no encontrado");
+                return ResponseEntity.status(404).body(response);
+            }
+            
+            Estudiante estudiante = estudianteOpt.get();
+            
+            // Verificar si tiene notas, respuestas de test, y afinidades
+            boolean tieneNotas = estudiante.getNotas() != null && !estudiante.getNotas().isEmpty();
+            boolean tieneTestHabilidades = estudiante.getRespuestasHabilidad() != null && 
+                                          !estudiante.getRespuestasHabilidad().isEmpty();
+            boolean tieneIntereses = estudiante.getAfinidades() != null && 
+                                    !estudiante.getAfinidades().isEmpty();
+            
+            response.put("success", true);
+            response.put("tieneNotas", tieneNotas);
+            response.put("tieneTestHabilidades", tieneTestHabilidades);
+            response.put("tieneIntereses", tieneIntereses);
+            response.put("totalNotas", tieneNotas ? estudiante.getNotas().size() : 0);
+            response.put("totalRespuestas", tieneTestHabilidades ? estudiante.getRespuestasHabilidad().size() : 0);
+            response.put("totalAfinidades", tieneIntereses ? estudiante.getAfinidades().size() : 0);
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
 
     // Clases para request
     public static class PerfilRequest {

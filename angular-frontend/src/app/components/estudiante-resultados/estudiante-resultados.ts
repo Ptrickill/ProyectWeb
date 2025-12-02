@@ -51,8 +51,23 @@ export class EstudianteResultados implements OnInit {
       return;
     }
     
-    this.estudianteId = usuario.id;
-    this.verificarProgresoYCargarResultados();
+    // Obtener el ID del estudiante desde el perfil
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiantes/usuario/${usuario.id}`)
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            this.estudianteId = response.data.id;
+            this.verificarProgresoYCargarResultados();
+          } else {
+            this.error = 'Debes crear tu perfil primero';
+            setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
+          }
+        },
+        error: (err) => {
+          this.error = 'Debes crear tu perfil primero';
+          setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
+        }
+      });
   }
 
   verificarProgresoYCargarResultados() {
@@ -83,7 +98,7 @@ export class EstudianteResultados implements OnInit {
   }
 
   calcularResultados() {
-    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/resultados/estudiante/${this.estudianteId}`)
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/resultados/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

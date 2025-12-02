@@ -1,12 +1,14 @@
 package com.proyectoingweb.proyectoingweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "afinidades", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"estudiante_id", "area"})
+    @UniqueConstraint(columnNames = {"estudiante_id", "carrera_id"})
 })
 public class Afinidad {
     
@@ -14,21 +16,31 @@ public class Afinidad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank(message = "El área es obligatoria")
-    @Column(name = "area", nullable = false)
-    private String area; // Matemáticas, Lengua, Ciencias, Sociales, Arte, Tecnología
+    @NotNull(message = "El nivel de interés es obligatorio")
+    @Min(value = 1, message = "El nivel mínimo es 1")
+    @Max(value = 5, message = "El nivel máximo es 5")
+    @Column(name = "nivel_interes", nullable = false)
+    private Integer nivelInteres; // 1-5 (1=muy bajo, 5=muy alto)
     
     @NotNull(message = "El estudiante es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estudiante_id", nullable = false)
+    @JsonIgnoreProperties({"notas", "respuestasHabilidad", "afinidades", "resultados"})
     private Estudiante estudiante;
+    
+    @NotNull(message = "La carrera es obligatoria")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "carrera_id", nullable = false)
+    @JsonIgnoreProperties({"carreraMaterias", "carreraHabilidades", "carreraAfinidades", "resultados"})
+    private Carrera carrera;
     
     // Constructores
     public Afinidad() {}
     
-    public Afinidad(String area, Estudiante estudiante) {
-        this.area = area;
+    public Afinidad(Integer nivelInteres, Estudiante estudiante, Carrera carrera) {
+        this.nivelInteres = nivelInteres;
         this.estudiante = estudiante;
+        this.carrera = carrera;
     }
     
     // Getters y Setters
@@ -40,12 +52,12 @@ public class Afinidad {
         this.id = id;
     }
     
-    public String getArea() {
-        return area;
+    public Integer getNivelInteres() {
+        return nivelInteres;
     }
     
-    public void setArea(String area) {
-        this.area = area;
+    public void setNivelInteres(Integer nivelInteres) {
+        this.nivelInteres = nivelInteres;
     }
     
     public Estudiante getEstudiante() {
@@ -56,11 +68,20 @@ public class Afinidad {
         this.estudiante = estudiante;
     }
     
+    public Carrera getCarrera() {
+        return carrera;
+    }
+    
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
+    }
+    
     @Override
     public String toString() {
         return "Afinidad{" +
                 "id=" + id +
-                ", area='" + area + '\'' +
+                ", nivelInteres=" + nivelInteres +
+                ", carrera=" + (carrera != null ? carrera.getNombre() : "null") +
                 '}';
     }
 }
