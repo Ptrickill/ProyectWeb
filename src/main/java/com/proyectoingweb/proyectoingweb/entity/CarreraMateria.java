@@ -1,5 +1,6 @@
 package com.proyectoingweb.proyectoingweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -22,13 +23,15 @@ public class CarreraMateria {
     private Float peso; // Peso de la materia para esta carrera (0-100)
     
     @NotNull(message = "La carrera es obligatoria")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "carrera_id", nullable = false)
+    @JsonIgnoreProperties({"carreraMaterias", "carreraHabilidades", "carreraAfinidades", "resultados"})
     private Carrera carrera;
     
     @NotNull(message = "La materia es obligatoria")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "materia_id", nullable = false)
+    @JsonIgnoreProperties({"notas"})
     private Materia materia;
     
     // Constructores
