@@ -1,5 +1,6 @@
 package com.proyectoingweb.proyectoingweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -22,13 +23,15 @@ public class Nota {
     private Float calificacion;
     
     @NotNull(message = "El estudiante es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "estudiante_id", nullable = false)
+    @JsonIgnoreProperties({"notas", "respuestasHabilidad", "afinidades", "resultados", "usuario"})
     private Estudiante estudiante;
     
     @NotNull(message = "La materia es obligatoria")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "materia_id", nullable = false)
+    @JsonIgnoreProperties({"carreraMaterias", "notas"})
     private Materia materia;
     
     // Constructores
