@@ -115,8 +115,8 @@ export class EstudianteNotas implements OnInit {
   }
 
   agregarNota() {
-    if (this.nuevaNota.materiaId === 0 || this.nuevaNota.calificacion < 0 || this.nuevaNota.calificacion > 100) {
-      this.error = 'Por favor selecciona una materia y una calificación válida (0-100)';
+    if (this.nuevaNota.materiaId === 0 || this.nuevaNota.calificacion < 0 || this.nuevaNota.calificacion > 10) {
+      this.error = 'Por favor selecciona una materia y una calificación válida (0-10)';
       return;
     }
 
