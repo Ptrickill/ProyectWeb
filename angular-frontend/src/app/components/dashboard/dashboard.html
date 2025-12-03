@@ -79,6 +79,31 @@
       </div>
       
     </div>
+    
+    <!-- Reporte de Materias Populares -->
+    <div class="reporte-section">
+      <h3>📊 Materias Más Cursadas</h3>
+      <div *ngIf="cargandoReporte" class="loading">Cargando reporte...</div>
+      <div *ngIf="!cargandoReporte && materiasPopulares.length === 0" class="empty">
+        No hay datos disponibles
+      </div>
+      <table *ngIf="!cargandoReporte && materiasPopulares.length > 0" class="reporte-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Materia</th>
+            <th>Estudiantes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of materiasPopulares; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.nombre }}</td>
+            <td><strong>{{ item.totalEstudiantes }}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ========== DASHBOARD DE ESTUDIANTE ========== -->

@@ -28,4 +28,12 @@ public interface NotaRepository extends JpaRepository<Nota, Long> {
     // Obtener notas de un estudiante por área
     @Query("SELECT n FROM Nota n WHERE n.estudiante.id = :estudianteId AND n.materia.area = :area")
     List<Nota> findByEstudianteIdAndArea(@Param("estudianteId") Long estudianteId, @Param("area") String area);
+    
+    // Reporte: Materias más cursadas
+    @Query(value = "SELECT m.nombre, COUNT(DISTINCT n.estudiante_id) as total_estudiantes " +
+                   "FROM notas n JOIN materias m ON n.materia_id = m.id " +
+                   "GROUP BY m.id, m.nombre " +
+                   "ORDER BY total_estudiantes DESC", 
+           nativeQuery = true)
+    List<Object[]> findMateriasPopulares();
 }

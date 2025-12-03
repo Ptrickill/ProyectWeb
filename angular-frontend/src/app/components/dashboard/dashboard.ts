@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService, Usuario } from '../../services/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,10 +14,15 @@ export class Dashboard implements OnInit {
   usuario: Usuario | null = null;
   esAdmin: boolean = false;
   esEstudiante: boolean = false;
+  
+  // Datos del reporte
+  materiasPopulares: any[] = [];
+  cargandoReporte: boolean = false;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +40,30 @@ export class Dashboard implements OnInit {
     console.log('👤 Usuario en dashboard:', this.usuario);
     console.log('🔧 Es Admin:', this.esAdmin);
     console.log('📚 Es Estudiante:', this.esEstudiante);
+    
+    // Si es admin, cargar reporte
+    if (this.esAdmin) {
+      this.cargarReporte();
+    }
+  }
+  
+  cargarReporte(): void {
+    this.cargandoReporte = true;
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/reportes/materias-populares')
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            this.materiasPopulares = response.data.map((item: any) => ({
+              nombre: item[0],
+              totalEstudiantes: item[1]
+            }));
+          }
+          this.cargandoReporte = false;
+        },
+        error: () => {
+          this.cargandoReporte = false;
+        }
+      });
   }
 
   // ========== MÉTODOS DE ADMIN ==========

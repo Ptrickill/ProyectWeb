@@ -97,6 +97,7 @@ export class EstudianteIntereses implements OnInit {
         next: (response) => {
           if (response.success && response.data) {
             this.afinidadesGuardadas = response.data;
+
             // Cargar en el Map
             response.data.forEach((a: any) => {
               this.afinidades.set(a.carrera.id, a.nivelInteres);
