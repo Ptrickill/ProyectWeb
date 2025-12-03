@@ -11,10 +11,10 @@ import java.util.Map;
 
 /**
  * Controller para ver datos del sistema desde el navegador (endpoints GET públicos)
- * Accede a: http://localhost:8080/api/view/...
+ * Accede a: http://localhost:8080/api/view/... o /api/public/...
  */
 @RestController
-@RequestMapping("/api/view")
+@RequestMapping("/api")
 
 public class PublicViewController {
 
@@ -36,44 +36,75 @@ public class PublicViewController {
     @Autowired
     private EstudianteService estudianteService;
 
+    // ========== ENDPOINTS PÚBLICOS ==========
+    
+    // Ver todas las carreras (público)
+    @GetMapping("/public/carreras")
+    public ResponseEntity<Map<String, Object>> getCarrerasPublico() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("data", carreraService.getAllCarreras());
+        return ResponseEntity.ok(response);
+    }
+
+    // Ver todas las materias (público)
+    @GetMapping("/public/materias")
+    public ResponseEntity<Map<String, Object>> getMateriasPublico() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("data", materiaService.getAllMaterias());
+        return ResponseEntity.ok(response);
+    }
+
+    // Ver todas las habilidades (público)
+    @GetMapping("/public/habilidades")
+    public ResponseEntity<Map<String, Object>> getHabilidadesPublico() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("data", habilidadService.getAllHabilidades());
+        return ResponseEntity.ok(response);
+    }
+    
+    // ========== ENDPOINTS DE VISTA (legacy) ==========
+
     // Ver todos los usuarios
-    @GetMapping("/usuarios")
+    @GetMapping("/view/usuarios")
     public ResponseEntity<?> getUsuarios() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     // Ver todas las carreras
-    @GetMapping("/carreras")
+    @GetMapping("/view/carreras")
     public ResponseEntity<?> getCarreras() {
         return ResponseEntity.ok(carreraService.getAllCarreras());
     }
 
     // Ver todas las materias
-    @GetMapping("/materias")
+    @GetMapping("/view/materias")
     public ResponseEntity<?> getMaterias() {
         return ResponseEntity.ok(materiaService.getAllMaterias());
     }
 
     // Ver todas las habilidades
-    @GetMapping("/habilidades")
+    @GetMapping("/view/habilidades")
     public ResponseEntity<?> getHabilidades() {
         return ResponseEntity.ok(habilidadService.getAllHabilidades());
     }
 
     // Ver todas las preguntas del test
-    @GetMapping("/preguntas")
+    @GetMapping("/view/preguntas")
     public ResponseEntity<?> getPreguntas() {
         return ResponseEntity.ok(preguntaService.getAllPreguntas());
     }
 
     // Ver todos los estudiantes
-    @GetMapping("/estudiantes")
+    @GetMapping("/view/estudiantes")
     public ResponseEntity<?> getEstudiantes() {
         return ResponseEntity.ok(estudianteService.getAllEstudiantes());
     }
 
     // Ver estadísticas generales del sistema
-    @GetMapping("/estadisticas")
+    @GetMapping("/view/estadisticas")
     public ResponseEntity<Map<String, Object>> getEstadisticas() {
         Map<String, Object> response = new HashMap<>();
         response.put("totalUsuarios", userService.getAllUsers().size());
@@ -86,7 +117,7 @@ public class PublicViewController {
     }
 
     // Ver todos los datos del sistema
-    @GetMapping("/todo")
+    @GetMapping("/view/todo")
     public ResponseEntity<Map<String, Object>> getTodoElSistema() {
         Map<String, Object> response = new HashMap<>();
         
