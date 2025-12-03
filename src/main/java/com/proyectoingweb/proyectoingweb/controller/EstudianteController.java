@@ -2,6 +2,9 @@ package com.proyectoingweb.proyectoingweb.controller;
 
 import com.proyectoingweb.proyectoingweb.entity.Estudiante;
 import com.proyectoingweb.proyectoingweb.service.EstudianteService;
+import com.proyectoingweb.proyectoingweb.service.NotaService;
+import com.proyectoingweb.proyectoingweb.service.RespuestaHabilidadService;
+import com.proyectoingweb.proyectoingweb.service.AfinidadService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,15 @@ public class EstudianteController {
 
     @Autowired
     private EstudianteService estudianteService;
+    
+    @Autowired
+    private NotaService notaService;
+    
+    @Autowired
+    private RespuestaHabilidadService respuestaHabilidadService;
+    
+    @Autowired
+    private AfinidadService afinidadService;
     
     // Obtener estudiante por usuario ID
     @GetMapping("/usuario/{usuarioId}")
@@ -244,22 +256,22 @@ public class EstudianteController {
                 return ResponseEntity.status(404).body(response);
             }
             
-            Estudiante estudiante = estudianteOpt.get();
+            // Contar directamente desde los servicios/repositorios
+            int totalNotas = notaService.getNotasByEstudiante(id).size();
+            int totalRespuestas = respuestaHabilidadService.getRespuestasByEstudiante(id).size();
+            int totalAfinidades = afinidadService.getAfinidadesByEstudiante(id).size();
             
-            // Verificar si tiene notas, respuestas de test, y afinidades
-            boolean tieneNotas = estudiante.getNotas() != null && !estudiante.getNotas().isEmpty();
-            boolean tieneTestHabilidades = estudiante.getRespuestasHabilidad() != null && 
-                                          !estudiante.getRespuestasHabilidad().isEmpty();
-            boolean tieneIntereses = estudiante.getAfinidades() != null && 
-                                    !estudiante.getAfinidades().isEmpty();
+            boolean tieneNotas = totalNotas > 0;
+            boolean tieneTestHabilidades = totalRespuestas > 0;
+            boolean tieneIntereses = totalAfinidades > 0;
             
             response.put("success", true);
             response.put("tieneNotas", tieneNotas);
             response.put("tieneTestHabilidades", tieneTestHabilidades);
             response.put("tieneIntereses", tieneIntereses);
-            response.put("totalNotas", tieneNotas ? estudiante.getNotas().size() : 0);
-            response.put("totalRespuestas", tieneTestHabilidades ? estudiante.getRespuestasHabilidad().size() : 0);
-            response.put("totalAfinidades", tieneIntereses ? estudiante.getAfinidades().size() : 0);
+            response.put("totalNotas", totalNotas);
+            response.put("totalRespuestas", totalRespuestas);
+            response.put("totalAfinidades", totalAfinidades);
             
             return ResponseEntity.ok(response);
         } catch (Exception e) {
