@@ -23,9 +23,9 @@ public class Afinidad {
     private Integer nivelInteres; // 1-5 (1=muy bajo, 5=muy alto)
     
     @NotNull(message = "El estudiante es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "estudiante_id", nullable = false)
-    @JsonIgnoreProperties({"notas", "respuestasHabilidad", "afinidades", "resultados"})
+    @JsonIgnoreProperties({"notas", "respuestasHabilidad", "afinidades", "resultados", "usuario"})
     private Estudiante estudiante;
     
     @NotNull(message = "La carrera es obligatoria")
