@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad Resultado con Builder Pattern implementado.
+ * El Builder facilita la construcción de objetos complejos de forma legible y flexible.
+ */
 @Entity
 @Table(name = "resultados")
 public class Resultado {
@@ -123,5 +127,83 @@ public class Resultado {
                 ", puntajeAfinidad=" + puntajeAfinidad +
                 ", fechaCalculo=" + fechaCalculo +
                 '}';
+    }
+    
+    // ========== BUILDER PATTERN ==========
+    /**
+     * Builder para construir objetos Resultado de forma fluida y legible.
+     * Ejemplo de uso:
+     * 
+     * Resultado resultado = Resultado.builder()
+     *     .estudiante(estudiante)
+     *     .carrera(carrera)
+     *     .puntajeAcademico(0.85f)
+     *     .puntajeHabilidades(0.75f)
+     *     .puntajeAfinidad(0.90f)
+     *     .puntajeFinal(0.82f)
+     *     .build();
+     */
+    public static class Builder {
+        private Estudiante estudiante;
+        private Carrera carrera;
+        private Float puntajeFinal;
+        private Float puntajeAcademico;
+        private Float puntajeHabilidades;
+        private Float puntajeAfinidad;
+        private LocalDateTime fechaCalculo = LocalDateTime.now();
+        
+        public Builder estudiante(Estudiante estudiante) {
+            this.estudiante = estudiante;
+            return this;
+        }
+        
+        public Builder carrera(Carrera carrera) {
+            this.carrera = carrera;
+            return this;
+        }
+        
+        public Builder puntajeFinal(Float puntajeFinal) {
+            this.puntajeFinal = puntajeFinal;
+            return this;
+        }
+        
+        public Builder puntajeAcademico(Float puntajeAcademico) {
+            this.puntajeAcademico = puntajeAcademico;
+            return this;
+        }
+        
+        public Builder puntajeHabilidades(Float puntajeHabilidades) {
+            this.puntajeHabilidades = puntajeHabilidades;
+            return this;
+        }
+        
+        public Builder puntajeAfinidad(Float puntajeAfinidad) {
+            this.puntajeAfinidad = puntajeAfinidad;
+            return this;
+        }
+        
+        public Builder fechaCalculo(LocalDateTime fechaCalculo) {
+            this.fechaCalculo = fechaCalculo;
+            return this;
+        }
+        
+        public Resultado build() {
+            Resultado resultado = new Resultado();
+            resultado.setEstudiante(this.estudiante);
+            resultado.setCarrera(this.carrera);
+            resultado.setPuntajeFinal(this.puntajeFinal);
+            resultado.setPuntajeAcademico(this.puntajeAcademico);
+            resultado.setPuntajeHabilidades(this.puntajeHabilidades);
+            resultado.setPuntajeAfinidad(this.puntajeAfinidad);
+            resultado.setFechaCalculo(this.fechaCalculo);
+            return resultado;
+        }
+    }
+    
+    /**
+     * Método estático para iniciar el Builder.
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 }

@@ -1,51 +1,70 @@
 package com.proyectoingweb.proyectoingweb.service;
 
 import com.proyectoingweb.proyectoingweb.entity.*;
+import com.proyectoingweb.proyectoingweb.factory.ResultadoFactory;
 import com.proyectoingweb.proyectoingweb.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.proyectoingweb.proyectoingweb.strategy.ComponenteAcademicoStrategy;
+import com.proyectoingweb.proyectoingweb.strategy.ComponenteAfinidadStrategy;
+import com.proyectoingweb.proyectoingweb.strategy.ComponenteCalculoStrategy;
+import com.proyectoingweb.proyectoingweb.strategy.ComponenteHabilidadesStrategy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Servicio para el cálculo vocacional del CORE del sistema.
  * Implementa la fórmula: Score = 0.5×Académico + 0.3×Habilidades + 0.2×Afinidad
+ * 
+ * PATRONES IMPLEMENTADOS:
+ * - Strategy Pattern: Diferentes estrategias de cálculo intercambiables
+ * - Factory Pattern: Creación centralizada de objetos Resultado
+ * - Dependency Inversion Principle: Inyección por constructor
  */
 @Service
 @Transactional
 public class CalculoVocacionalService {
     
-    @Autowired
-    private EstudianteRepository estudianteRepository;
+    // Repositorios
+    private final EstudianteRepository estudianteRepository;
+    private final CarreraRepository carreraRepository;
+    private final NotaRepository notaRepository;
+    private final RespuestaHabilidadRepository respuestaHabilidadRepository;
+    private final AfinidadRepository afinidadRepository;
+    private final ResultadoRepository resultadoRepository;
     
-    @Autowired
-    private CarreraRepository carreraRepository;
+    // Estrategias de cálculo (Strategy Pattern)
+    private final ComponenteCalculoStrategy estrategiaAcademica;
+    private final ComponenteCalculoStrategy estrategiaHabilidades;
+    private final ComponenteCalculoStrategy estrategiaAfinidad;
     
-    @Autowired
-    private NotaRepository notaRepository;
+    // Factory para creación de resultados (Factory Pattern)
+    private final ResultadoFactory resultadoFactory;
     
-    @Autowired
-    private RespuestaHabilidadRepository respuestaHabilidadRepository;
-    
-    @Autowired
-    private AfinidadRepository afinidadRepository;
-    
-    @Autowired
-    private CarreraMateriaRepository carreraMateriaRepository;
-    
-    @Autowired
-    private CarreraHabilidadRepository carreraHabilidadRepository;
-    
-    @Autowired
-    private CarreraAfinidadRepository carreraAfinidadRepository;
-    
-    @Autowired
-    private ResultadoRepository resultadoRepository;
+    // Inyección por constructor (mejora DIP - Dependency Inversion Principle)
+    public CalculoVocacionalService(
+            EstudianteRepository estudianteRepository,
+            CarreraRepository carreraRepository,
+            NotaRepository notaRepository,
+            RespuestaHabilidadRepository respuestaHabilidadRepository,
+            AfinidadRepository afinidadRepository,
+            ResultadoRepository resultadoRepository,
+            ComponenteAcademicoStrategy estrategiaAcademica,
+            ComponenteHabilidadesStrategy estrategiaHabilidades,
+            ComponenteAfinidadStrategy estrategiaAfinidad,
+            ResultadoFactory resultadoFactory) {
+        this.estudianteRepository = estudianteRepository;
+        this.carreraRepository = carreraRepository;
+        this.notaRepository = notaRepository;
+        this.respuestaHabilidadRepository = respuestaHabilidadRepository;
+        this.afinidadRepository = afinidadRepository;
+        this.resultadoRepository = resultadoRepository;
+        this.estrategiaAcademica = estrategiaAcademica;
+        this.estrategiaHabilidades = estrategiaHabilidades;
+        this.estrategiaAfinidad = estrategiaAfinidad;
+        this.resultadoFactory = resultadoFactory;
+    }
     
     // Constantes de la fórmula
     private static final float PESO_ACADEMICO = 0.5f;
@@ -54,152 +73,32 @@ public class CalculoVocacionalService {
     
     /**
      * PASO 1: Calcular componente académico (50%)
-     * Fórmula: Suma(Nota × PesoMateria) / SumaPesos / 10
+     * Usa Strategy Pattern para delegar el cálculo
      */
     public float calcularComponenteAcademico(Long estudianteId, Long carreraId) {
-        // Obtener notas del estudiante
-        List<Nota> notas = notaRepository.findByEstudianteId(estudianteId);
-        
-        if (notas.isEmpty()) {
-            return 0.0f;
-        }
-        
-        // Obtener pesos de materias para esta carrera
-        List<CarreraMateria> pesosCarrera = carreraMateriaRepository.findByCarreraId(carreraId);
-        
-        if (pesosCarrera.isEmpty()) {
-            return 0.0f;
-        }
-        
-        // Crear mapa de pesos por materia para búsqueda rápida
-        Map<Long, Float> pesosPorMateria = new HashMap<>();
-        float sumaPesos = 0.0f;
-        
-        for (CarreraMateria cm : pesosCarrera) {
-            pesosPorMateria.put(cm.getMateria().getId(), cm.getPeso());
-            sumaPesos += cm.getPeso();
-        }
-        
-        // Calcular suma ponderada
-        float sumaPonderada = 0.0f;
-        
-        for (Nota nota : notas) {
-            Long materiaId = nota.getMateria().getId();
-            if (pesosPorMateria.containsKey(materiaId)) {
-                float peso = pesosPorMateria.get(materiaId);
-                sumaPonderada += nota.getCalificacion() * peso;
-            }
-        }
-        
-        // Normalizar (dividir entre suma de pesos y luego entre 10)
-        if (sumaPesos == 0) return 0.0f;
-        
-        float promedioPonderado = sumaPonderada / sumaPesos;
-        float normalizado = promedioPonderado / 10.0f; // Notas van de 0-10
-        
-        return normalizado;
+        return estrategiaAcademica.calcular(estudianteId, carreraId);
     }
     
     /**
      * PASO 2: Calcular componente habilidades (30%)
-     * Fórmula: Suma(PromedioHabilidad × PesoHabilidad) / SumaPesos / 5
+     * Usa Strategy Pattern para delegar el cálculo
      */
     public float calcularComponenteHabilidades(Long estudianteId, Long carreraId) {
-        // Obtener respuestas del estudiante
-        List<RespuestaHabilidad> respuestas = respuestaHabilidadRepository.findByEstudianteId(estudianteId);
-        
-        if (respuestas.isEmpty()) {
-            return 0.0f;
-        }
-        
-        // Obtener pesos de habilidades para esta carrera
-        List<CarreraHabilidad> pesosCarrera = carreraHabilidadRepository.findByCarreraId(carreraId);
-        
-        if (pesosCarrera.isEmpty()) {
-            return 0.0f;
-        }
-        
-        // Agrupar respuestas por habilidad y calcular promedio
-        Map<Long, List<Integer>> respuestasPorHabilidad = new HashMap<>();
-        
-        for (RespuestaHabilidad respuesta : respuestas) {
-            Long habilidadId = respuesta.getPregunta().getHabilidad().getId();
-            respuestasPorHabilidad.putIfAbsent(habilidadId, new ArrayList<>());
-            respuestasPorHabilidad.get(habilidadId).add(respuesta.getPuntaje());
-        }
-        
-        // Calcular promedio por habilidad
-        Map<Long, Float> promediosPorHabilidad = new HashMap<>();
-        
-        for (Map.Entry<Long, List<Integer>> entry : respuestasPorHabilidad.entrySet()) {
-            List<Integer> puntajes = entry.getValue();
-            float promedio = (float) puntajes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
-            promediosPorHabilidad.put(entry.getKey(), promedio);
-        }
-        
-        // Crear mapa de pesos por habilidad
-        Map<Long, Float> pesosPorHabilidad = new HashMap<>();
-        float sumaPesos = 0.0f;
-        
-        for (CarreraHabilidad ch : pesosCarrera) {
-            pesosPorHabilidad.put(ch.getHabilidad().getId(), ch.getPeso());
-            sumaPesos += ch.getPeso();
-        }
-        
-        // Calcular suma ponderada
-        float sumaPonderada = 0.0f;
-        
-        for (Map.Entry<Long, Float> entry : promediosPorHabilidad.entrySet()) {
-            Long habilidadId = entry.getKey();
-            if (pesosPorHabilidad.containsKey(habilidadId)) {
-                float peso = pesosPorHabilidad.get(habilidadId);
-                sumaPonderada += entry.getValue() * peso;
-            }
-        }
-        
-        // Normalizar (dividir entre suma de pesos y luego entre 5)
-        if (sumaPesos == 0) return 0.0f;
-        
-        float promedioPonderado = sumaPonderada / sumaPesos;
-        float normalizado = promedioPonderado / 5.0f; // Respuestas van de 1-5
-        
-        return normalizado;
+        return estrategiaHabilidades.calcular(estudianteId, carreraId);
     }
     
     /**
      * PASO 3: Calcular componente afinidad (20%)
-     * Fórmula: Promedio del nivel de interés del estudiante en la carrera
-     * nivelInteres va de 1-5, se normaliza dividiendo entre 5
+     * Usa Strategy Pattern para delegar el cálculo
      */
     public float calcularComponenteAfinidad(Long estudianteId, Long carreraId) {
-        // Obtener afinidades del estudiante
-        List<Afinidad> afinidades = afinidadRepository.findByEstudianteId(estudianteId);
-        
-        if (afinidades.isEmpty()) {
-            return 0.0f;
-        }
-        
-        // Buscar si el estudiante tiene afinidad con esta carrera específica
-        Optional<Afinidad> afinidadCarrera = afinidades.stream()
-            .filter(a -> a.getCarrera() != null && a.getCarrera().getId().equals(carreraId))
-            .findFirst();
-        
-        if (afinidadCarrera.isPresent()) {
-            // Si tiene afinidad directa con esta carrera, usar su nivel de interés
-            Integer nivelInteres = afinidadCarrera.get().getNivelInteres();
-            if (nivelInteres == null) return 0.0f;
-            
-            // Normalizar: nivel va de 1-5, convertir a 0-1
-            return nivelInteres / 5.0f;
-        }
-        
-        // Si no tiene afinidad registrada para esta carrera, retornar 0
-        return 0.0f;
+        return estrategiaAfinidad.calcular(estudianteId, carreraId);
     }
     
     /**
      * PASO 4: Calcular puntaje final para una carrera
      * Aplica la fórmula: Score = 0.5×Académico + 0.3×Habilidades + 0.2×Afinidad
+     * Usa Factory Pattern para crear el objeto Resultado
      */
     public Resultado calcularPuntajeCarrera(Long estudianteId, Long carreraId) {
         // Validar que el estudiante existe
@@ -210,26 +109,15 @@ public class CalculoVocacionalService {
         Carrera carrera = carreraRepository.findById(carreraId)
             .orElseThrow(() -> new RuntimeException("Carrera no encontrada con ID: " + carreraId));
         
-        // Calcular componentes
+        // Calcular componentes usando Strategy Pattern
         float puntajeAcademico = calcularComponenteAcademico(estudianteId, carreraId);
         float puntajeHabilidades = calcularComponenteHabilidades(estudianteId, carreraId);
         float puntajeAfinidad = calcularComponenteAfinidad(estudianteId, carreraId);
         
-        // Aplicar fórmula final
-        float puntajeFinal = (PESO_ACADEMICO * puntajeAcademico) + 
-                            (PESO_HABILIDADES * puntajeHabilidades) + 
-                            (PESO_AFINIDAD * puntajeAfinidad);
-        
-        // Crear resultado
-        Resultado resultado = new Resultado();
-        resultado.setEstudiante(estudiante);
-        resultado.setCarrera(carrera);
-        resultado.setPuntajeFinal(puntajeFinal);
-        resultado.setPuntajeAcademico(puntajeAcademico);
-        resultado.setPuntajeHabilidades(puntajeHabilidades);
-        resultado.setPuntajeAfinidad(puntajeAfinidad);
-        
-        return resultado;
+        // Usar Factory Pattern para crear el resultado
+        return resultadoFactory.createResultadoConFormula(
+            estudiante, carrera, puntajeAcademico, puntajeHabilidades, puntajeAfinidad
+        );
     }
     
     /**

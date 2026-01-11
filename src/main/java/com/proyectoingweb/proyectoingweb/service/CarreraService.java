@@ -5,28 +5,38 @@ import com.proyectoingweb.proyectoingweb.repository.CarreraAfinidadRepository;
 import com.proyectoingweb.proyectoingweb.repository.CarreraHabilidadRepository;
 import com.proyectoingweb.proyectoingweb.repository.CarreraMateriaRepository;
 import com.proyectoingweb.proyectoingweb.repository.CarreraRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio de gestión de carreras.
+ * 
+ * PRINCIPIOS SOLID APLICADOS:
+ * - Single Responsibility: Solo maneja lógica de carreras
+ * - Dependency Inversion: Inyección por constructor
+ */
 @Service
 @Transactional
 public class CarreraService {
     
-    @Autowired
-    private CarreraRepository carreraRepository;
+    private final CarreraRepository carreraRepository;
+    private final CarreraMateriaRepository carreraMateriaRepository;
+    private final CarreraHabilidadRepository carreraHabilidadRepository;
+    private final CarreraAfinidadRepository carreraAfinidadRepository;
     
-    @Autowired
-    private CarreraMateriaRepository carreraMateriaRepository;
-    
-    @Autowired
-    private CarreraHabilidadRepository carreraHabilidadRepository;
-    
-    @Autowired
-    private CarreraAfinidadRepository carreraAfinidadRepository;
+    // Inyección por constructor (DIP - Dependency Inversion Principle)
+    public CarreraService(CarreraRepository carreraRepository,
+                         CarreraMateriaRepository carreraMateriaRepository,
+                         CarreraHabilidadRepository carreraHabilidadRepository,
+                         CarreraAfinidadRepository carreraAfinidadRepository) {
+        this.carreraRepository = carreraRepository;
+        this.carreraMateriaRepository = carreraMateriaRepository;
+        this.carreraHabilidadRepository = carreraHabilidadRepository;
+        this.carreraAfinidadRepository = carreraAfinidadRepository;
+    }
     
     // Obtener todas las carreras
     public List<Carrera> getAllCarreras() {

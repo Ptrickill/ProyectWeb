@@ -1,38 +1,49 @@
 package com.proyectoingweb.proyectoingweb.config;
 
 import com.proyectoingweb.proyectoingweb.entity.*;
+import com.proyectoingweb.proyectoingweb.factory.UserFactory;
 import com.proyectoingweb.proyectoingweb.service.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * Inicializador de datos del sistema.
+ * Usa Factory Pattern para crear usuarios.
+ */
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final UserFactory userFactory;
+    private final CarreraService carreraService;
+    private final MateriaService materiaService;
+    private final HabilidadService habilidadService;
+    private final PreguntaService preguntaService;
+    private final CarreraMateriaService carreraMateriaService;
+    private final CarreraHabilidadService carreraHabilidadService;
+    private final CarreraAfinidadService carreraAfinidadService;
     
-    @Autowired
-    private CarreraService carreraService;
-    
-    @Autowired
-    private MateriaService materiaService;
-    
-    @Autowired
-    private HabilidadService habilidadService;
-    
-    @Autowired
-    private PreguntaService preguntaService;
-    
-    @Autowired
-    private CarreraMateriaService carreraMateriaService;
-    
-    @Autowired
-    private CarreraHabilidadService carreraHabilidadService;
-    
-    @Autowired
-    private CarreraAfinidadService carreraAfinidadService;
+    // Inyección por constructor
+    public DataInitializer(UserService userService,
+                          UserFactory userFactory,
+                          CarreraService carreraService,
+                          MateriaService materiaService,
+                          HabilidadService habilidadService,
+                          PreguntaService preguntaService,
+                          CarreraMateriaService carreraMateriaService,
+                          CarreraHabilidadService carreraHabilidadService,
+                          CarreraAfinidadService carreraAfinidadService) {
+        this.userService = userService;
+        this.userFactory = userFactory;
+        this.carreraService = carreraService;
+        this.materiaService = materiaService;
+        this.habilidadService = habilidadService;
+        this.preguntaService = preguntaService;
+        this.carreraMateriaService = carreraMateriaService;
+        this.carreraHabilidadService = carreraHabilidadService;
+        this.carreraAfinidadService = carreraAfinidadService;
+    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -63,30 +74,26 @@ public class DataInitializer implements CommandLineRunner {
     private void initUsuarios() {
         System.out.println("📋 Inicializando usuarios...");
         
-        // Usuario administrador
+        // Usuario administrador usando Factory Pattern
         if (!userService.existsByUsername("admin")) {
-            User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword("admin123"); 
-            admin.setEmail("admin@ingenieriaweb.com");
-            admin.setNombreCompleto("Administrador del Sistema");
-            admin.setRole(User.Role.ADMIN);
-            admin.setEnabled(true);
-            
+            User admin = userFactory.createAdmin(
+                "admin",
+                "admin123",
+                "admin@ingenieriaweb.com",
+                "Administrador del Sistema"
+            );
             userService.createUser(admin);
             System.out.println("   ✓ Usuario administrador creado: admin / admin123");
         }
         
-        // Usuario de prueba
+        // Usuario de prueba usando Factory Pattern
         if (!userService.existsByUsername("usuario")) {
-            User user = new User();
-            user.setUsername("usuario");
-            user.setPassword("user123"); 
-            user.setEmail("usuario@ingenieriaweb.com");
-            user.setNombreCompleto("Usuario de Prueba");
-            user.setRole(User.Role.USER);
-            user.setEnabled(true);
-            
+            User user = userFactory.createUser(
+                "usuario",
+                "user123",
+                "usuario@ingenieriaweb.com",
+                "Usuario de Prueba"
+            );
             userService.createUser(user);
             System.out.println("   ✓ Usuario de prueba creado: usuario / user123");
         }

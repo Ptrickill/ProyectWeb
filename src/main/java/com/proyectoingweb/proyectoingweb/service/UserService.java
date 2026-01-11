@@ -1,20 +1,36 @@
 package com.proyectoingweb.proyectoingweb.service;
 
 import com.proyectoingweb.proyectoingweb.entity.User;
+import com.proyectoingweb.proyectoingweb.factory.UserFactory;
 import com.proyectoingweb.proyectoingweb.repository.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio de gestión de usuarios.
+ * 
+ * PRINCIPIOS SOLID APLICADOS:
+ * - Single Responsibility: Solo maneja lógica de usuarios
+ * - Dependency Inversion: Inyección por constructor
+ * 
+ * PATRONES APLICADOS:
+ * - Factory Pattern: Usa UserFactory para crear usuarios
+ */
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserFactory userFactory;
+
+    // Inyección por constructor (DIP - Dependency Inversion Principle)
+    public UserService(UserRepository userRepository, UserFactory userFactory) {
+        this.userRepository = userRepository;
+        this.userFactory = userFactory;
+    }
 
     // Operaciones CRUD
     public User createUser(User user) {
