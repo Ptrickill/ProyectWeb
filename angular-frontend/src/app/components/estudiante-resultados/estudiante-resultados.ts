@@ -51,64 +51,82 @@ export class EstudianteResultados implements OnInit {
       return;
     }
     
-    // Obtener el ID del estudiante desde el perfil
-    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiantes/usuario/${usuario.id}`)
-      .subscribe({
-        next: (response) => {
-          if (response.success && response.data) {
-            this.estudianteId = response.data.id;
-            this.verificarProgresoYCargarResultados();
-          } else {
-            this.error = 'Debes crear tu perfil primero';
-            setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
-          }
-        },
-        error: (err) => {
-          this.error = 'Debes crear tu perfil primero';
-          setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
-        }
-      });
+    // Usar directamente el ID del usuario como estudianteId
+    this.estudianteId = usuario.id;
+    this.verificarProgresoYCargarResultados();
   }
 
   verificarProgresoYCargarResultados() {
     this.cargando = true;
     this.error = '';
 
-    // Verificar progreso del estudiante
-    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiantes/${this.estudianteId}/progreso`)
+    // Verificar notas
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/notas/estudiante/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
-          this.tieneNotas = response.tieneNotas || false;
-          this.tieneTestHabilidades = response.tieneTestHabilidades || false;
-          this.tieneIntereses = response.tieneIntereses || false;
+          this.tieneNotas = response.success && response.notas && response.notas.length > 0;
+          this.verificarHabilidades();
+        },
+        error: () => {
+          this.tieneNotas = false;
+          this.verificarHabilidades();
+        }
+      });
+  }
 
-          // Si tiene todo completo, calcular resultados
+  verificarHabilidades() {
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/test/respuestas/${this.estudianteId}`)
+      .subscribe({
+        next: (response) => {
+          this.tieneTestHabilidades = response.success && response.respuestas && response.respuestas.length > 0;
+          this.verificarIntereses();
+        },
+        error: () => {
+          this.tieneTestHabilidades = false;
+          this.verificarIntereses();
+        }
+      });
+  }
+
+  verificarIntereses() {
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/afinidades/estudiante/${this.estudianteId}`)
+      .subscribe({
+        next: (response) => {
+          this.tieneIntereses = response.success && response.afinidades && response.afinidades.length > 0;
+          
+          // Si tiene todo completo, calcular resultados automáticamente
           if (this.tieneNotas && this.tieneTestHabilidades && this.tieneIntereses) {
             this.calcularResultados();
           } else {
             this.cargando = false;
           }
         },
-        error: (err) => {
-          console.error('Error verificando progreso:', err);
-          this.error = 'No se pudo verificar tu progreso';
+        error: () => {
+          this.tieneIntereses = false;
           this.cargando = false;
         }
       });
   }
 
   calcularResultados() {
-    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/resultados/${this.estudianteId}`)
+    // Primero ejecutar el cálculo
+    this.http.post<any>(`https://proyectweb-rech.onrender.com/api/estudiante/resultados/calcular/${this.estudianteId}`, {})
       .subscribe({
         next: (response) => {
-          if (response.success && response.data) {
-            this.resultados = response.data.slice(0, 3); // Top 3
+          console.log('Resultados calculados:', response);
+          if (response.success && response.resultados && response.resultados.length > 0) {
+            // Ordenar por puntaje total descendente y tomar top 3
+            this.resultados = response.resultados
+              .sort((a: any, b: any) => b.puntajeTotal - a.puntajeTotal)
+              .slice(0, 3);
+          } else {
+            this.error = 'No se pudieron calcular resultados. Verifica tus datos.';
           }
           this.cargando = false;
         },
         error: (err) => {
           console.error('Error calculando resultados:', err);
-          this.error = 'Error al calcular tus resultados vocacionales';
+          this.error = 'Error al calcular tus resultados vocacionales: ' + (err.error?.message || err.message);
           this.cargando = false;
         }
       });
