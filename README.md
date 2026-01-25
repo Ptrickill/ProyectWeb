@@ -504,8 +504,6 @@ npm run e2e
 ## 📝 Documentación Adicional
 
 - [SOLID_Y_PATRONES.md](SOLID_Y_PATRONES.md) - Documentación detallada de principios SOLID y patrones implementados
-- [GUIA_EVALUACION.md](GUIA_EVALUACION.md) - Guía para evaluación del proyecto
-- [RESUMEN_IMPLEMENTACION.md](RESUMEN_IMPLEMENTACION.md) - Resumen de implementación técnica
 
 ---
 
