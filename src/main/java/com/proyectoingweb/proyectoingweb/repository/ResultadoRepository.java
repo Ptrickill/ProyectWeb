@@ -27,11 +27,17 @@ public interface ResultadoRepository extends JpaRepository<Resultado, Long> {
     // Eliminar todos los resultados de un estudiante (para recalcular)
     void deleteByEstudianteId(Long estudianteId);
     
-    // Reporte: Carreras más recomendadas (las que más aparecen en los resultados)
-    @Query(value = "SELECT c.nombre, COUNT(DISTINCT r.estudiante_id) as total_estudiantes " +
-                   "FROM resultados r " +
-                   "JOIN carreras c ON r.carrera_id = c.id " +
-                   "GROUP BY c.id, c.nombre " +
+    // Reporte: Carreras más recomendadas (solo las del Top 3 de cada estudiante)
+    @Query(value = "WITH ranked_resultados AS ( " +
+                   "  SELECT r.estudiante_id, r.carrera_id, c.nombre, " +
+                   "         ROW_NUMBER() OVER (PARTITION BY r.estudiante_id ORDER BY r.puntaje_final DESC) as ranking " +
+                   "  FROM resultados r " +
+                   "  JOIN carreras c ON r.carrera_id = c.id " +
+                   ") " +
+                   "SELECT nombre, COUNT(DISTINCT estudiante_id) as total_estudiantes " +
+                   "FROM ranked_resultados " +
+                   "WHERE ranking <= 3 " +
+                   "GROUP BY nombre " +
                    "ORDER BY total_estudiantes DESC " +
                    "LIMIT 10", 
            nativeQuery = true)
