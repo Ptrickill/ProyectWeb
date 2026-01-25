@@ -40,6 +40,14 @@
     <h2>⚠️ Proceso Incompleto</h2>
     <p>Para obtener tus resultados vocacionales, necesitas completar todos los pasos:</p>
     
+    <!-- Botón para calcular manualmente -->
+    <div class="manual-calculate">
+      <p class="hint">¿Ya completaste todos los pasos pero no aparecen marcados?</p>
+      <button class="btn-calcular-manual" (click)="calcularResultadosManual()">
+        🚀 Calcular Resultados Ahora
+      </button>
+    </div>
+
     <div class="pasos-pendientes">
       <div class="paso" *ngIf="!tieneNotas">
         <span class="numero">1</span>

@@ -132,6 +132,13 @@ export class EstudianteResultados implements OnInit {
       });
   }
 
+  calcularResultadosManual() {
+    this.cargando = true;
+    this.error = '';
+    // Forzar el cálculo sin verificar progreso
+    this.calcularResultados();
+  }
+
   obtenerColorPorPosicion(index: number): string {
     if (index === 0) return 'gold';
     if (index === 1) return 'silver';
