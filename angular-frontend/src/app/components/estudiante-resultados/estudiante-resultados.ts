@@ -51,9 +51,25 @@ export class EstudianteResultados implements OnInit {
       return;
     }
     
-    // Usar directamente el ID del usuario como estudianteId
-    this.estudianteId = usuario.id;
-    this.verificarProgresoYCargarResultados();
+    // Primero obtener el ID del estudiante desde el perfil
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiantes/usuario/${usuario.id}`)
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            this.estudianteId = response.data.id;
+            this.verificarProgresoYCargarResultados();
+          } else {
+            this.error = 'Debes crear tu perfil primero';
+            this.cargando = false;
+            setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
+          }
+        },
+        error: (err) => {
+          this.error = 'Debes crear tu perfil primero';
+          this.cargando = false;
+          setTimeout(() => this.router.navigate(['/estudiante/perfil']), 2000);
+        }
+      });
   }
 
   verificarProgresoYCargarResultados() {
