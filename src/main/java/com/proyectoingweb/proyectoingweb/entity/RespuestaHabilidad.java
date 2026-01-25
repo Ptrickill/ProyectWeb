@@ -1,5 +1,6 @@
 package com.proyectoingweb.proyectoingweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -22,13 +23,15 @@ public class RespuestaHabilidad {
     private Integer puntaje; // Escala 1-5
     
     @NotNull(message = "El estudiante es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "estudiante_id", nullable = false)
+    @JsonIgnoreProperties({"notas", "respuestas", "afinidades", "resultados", "password"})
     private Estudiante estudiante;
     
     @NotNull(message = "La pregunta es obligatoria")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pregunta_id", nullable = false)
+    @JsonIgnoreProperties({"respuestas"})
     private Pregunta pregunta;
     
     // Constructores
