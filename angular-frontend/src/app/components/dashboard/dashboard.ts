@@ -16,7 +16,7 @@ export class Dashboard implements OnInit {
   esEstudiante: boolean = false;
   
   // Datos del reporte
-  materiasPopulares: any[] = [];
+  carrerasRecomendadas: any[] = [];
   cargandoReporte: boolean = false;
 
   constructor(
@@ -49,11 +49,11 @@ export class Dashboard implements OnInit {
   
   cargarReporte(): void {
     this.cargandoReporte = true;
-    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/reportes/materias-populares')
+    this.http.get<any>('https://proyectweb-rech.onrender.com/api/admin/reportes/carreras-recomendadas')
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
-            this.materiasPopulares = response.data.map((item: any) => ({
+            this.carrerasRecomendadas = response.data.map((item: any) => ({
               nombre: item[0],
               totalEstudiantes: item[1]
             }));

@@ -80,23 +80,24 @@
       
     </div>
     
-    <!-- Reporte de Materias Populares -->
+    <!-- Reporte de Carreras Más Recomendadas -->
     <div class="reporte-section">
-      <h3> Materias Más Cursadas</h3>
+      <h3>🎯 Carreras Más Recomendadas</h3>
+      <p class="subtitle-reporte">Basado en los resultados vocacionales de los estudiantes</p>
       <div *ngIf="cargandoReporte" class="loading">Cargando reporte...</div>
-      <div *ngIf="!cargandoReporte && materiasPopulares.length === 0" class="empty">
-        No hay datos disponibles
+      <div *ngIf="!cargandoReporte && carrerasRecomendadas.length === 0" class="empty">
+        No hay resultados vocacionales aún
       </div>
-      <table *ngIf="!cargandoReporte && materiasPopulares.length > 0" class="reporte-table">
+      <table *ngIf="!cargandoReporte && carrerasRecomendadas.length > 0" class="reporte-table">
         <thead>
           <tr>
             <th>#</th>
-            <th>Materia</th>
+            <th>Carrera</th>
             <th>Estudiantes</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of materiasPopulares; let i = index">
+          <tr *ngFor="let item of carrerasRecomendadas; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ item.nombre }}</td>
             <td><strong>{{ item.totalEstudiantes }}</strong></td>
