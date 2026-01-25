@@ -115,11 +115,11 @@
           </div>
           <div class="puntaje-total">
             <span class="label">🎯 Puntaje Total:</span>
-            <span class="valor total">{{ resultado.puntajeTotal.toFixed(2) }}%</span>
+            <span class="valor total">{{ (resultado.puntajeFinal * 100).toFixed(2) }}%</span>
           </div>
         </div>
 
-        <div class="mensaje">{{ resultado.mensaje }}</div>
+        <div class="mensaje" *ngIf="resultado.mensaje">{{ resultado.mensaje }}</div>
       </div>
     </div>
   </div>

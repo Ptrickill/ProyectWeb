@@ -16,8 +16,8 @@ interface Resultado {
   puntajeAcademico: number;
   puntajeHabilidades: number;
   puntajeAfinidad: number;
-  puntajeTotal: number;
-  mensaje: string;
+  puntajeFinal: number;
+  mensaje?: string;
 }
 
 @Component({
@@ -123,10 +123,14 @@ export class EstudianteResultados implements OnInit {
         next: (response) => {
           console.log('Resultados calculados:', response);
           if (response.success && response.resultados && response.resultados.length > 0) {
-            // Ordenar por puntaje total descendente y tomar top 3
+            // Ordenar por puntaje final descendente y tomar top 3
             this.resultados = response.resultados
-              .sort((a: any, b: any) => b.puntajeTotal - a.puntajeTotal)
-              .slice(0, 3);
+              .sort((a: any, b: any) => b.puntajeFinal - a.puntajeFinal)
+              .slice(0, 3)
+              .map((r: any) => ({
+                ...r,
+                mensaje: this.obtenerMensajePorPosicion(r.puntajeFinal)
+              }));
           } else {
             this.error = 'No se pudieron calcular resultados. Verifica tus datos.';
           }
@@ -159,6 +163,14 @@ export class EstudianteResultados implements OnInit {
     if (index === 1) return '🥈';
     if (index === 2) return '🥉';
     return '';
+  }
+
+  obtenerMensajePorPosicion(puntaje: number): string {
+    const porcentaje = puntaje * 100;
+    if (porcentaje >= 80) return '¡Excelente compatibilidad! Esta carrera se ajusta muy bien a tu perfil.';
+    if (porcentaje >= 60) return '¡Buena opción! Tienes bastante afinidad con esta carrera.';
+    if (porcentaje >= 40) return 'Opción viable. Considera explorar más sobre esta carrera.';
+    return 'Compatibilidad moderada. Explora todas las opciones disponibles.';
   }
 
   volverAlDashboard() {
