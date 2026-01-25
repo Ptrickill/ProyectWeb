@@ -60,14 +60,16 @@ export class EstudianteResultados implements OnInit {
     this.cargando = true;
     this.error = '';
 
-    // Verificar notas
-    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/notas/estudiante/${this.estudianteId}`)
+    // Verificar notas - Ruta correcta
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/notas/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
+          console.log('Notas response:', response);
           this.tieneNotas = response.success && response.notas && response.notas.length > 0;
           this.verificarHabilidades();
         },
-        error: () => {
+        error: (err) => {
+          console.error('Error verificando notas:', err);
           this.tieneNotas = false;
           this.verificarHabilidades();
         }
@@ -75,13 +77,16 @@ export class EstudianteResultados implements OnInit {
   }
 
   verificarHabilidades() {
+    // Verificar respuestas de habilidades - Ruta correcta
     this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/test/respuestas/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
+          console.log('Habilidades response:', response);
           this.tieneTestHabilidades = response.success && response.respuestas && response.respuestas.length > 0;
           this.verificarIntereses();
         },
-        error: () => {
+        error: (err) => {
+          console.error('Error verificando habilidades:', err);
           this.tieneTestHabilidades = false;
           this.verificarIntereses();
         }
@@ -89,10 +94,12 @@ export class EstudianteResultados implements OnInit {
   }
 
   verificarIntereses() {
-    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/afinidades/estudiante/${this.estudianteId}`)
+    // Verificar afinidades - Ruta correcta (usa "data" en lugar de "afinidades")
+    this.http.get<any>(`https://proyectweb-rech.onrender.com/api/estudiante/afinidades/${this.estudianteId}`)
       .subscribe({
         next: (response) => {
-          this.tieneIntereses = response.success && response.afinidades && response.afinidades.length > 0;
+          console.log('Afinidades response:', response);
+          this.tieneIntereses = response.success && response.data && response.data.length > 0;
           
           // Si tiene todo completo, calcular resultados automáticamente
           if (this.tieneNotas && this.tieneTestHabilidades && this.tieneIntereses) {
@@ -101,7 +108,8 @@ export class EstudianteResultados implements OnInit {
             this.cargando = false;
           }
         },
-        error: () => {
+        error: (err) => {
+          console.error('Error verificando intereses:', err);
           this.tieneIntereses = false;
           this.cargando = false;
         }
